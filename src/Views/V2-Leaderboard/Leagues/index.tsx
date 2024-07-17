@@ -131,7 +131,6 @@ const Leagues = () => {
                               setOffset={setOffset}
                               activeChainId={activeChain.id}
                               league={league}
-                              graphUrl={config.graph.LEADERBOARD}
                               weekId={getLeaderboardWeekId(
                                 parseInt(offset ?? '0')
                               )}

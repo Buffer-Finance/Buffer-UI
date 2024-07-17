@@ -19,23 +19,29 @@ export const useSeasonTotalData = (weekId: number) => {
         return undefined;
       }
       const query = `{
-            totalDatas(where: {id: "${weekId}total"}) {
+            totalDatas(where: {id: "total${weekId}"}) {
+              items{
                 trades
                 volume
                 fee
                 participents
+
+              }
               }
             }
             `;
       try {
-        const { data, status } = await axios.post(config.graph.LEADERBOARD, {
-          query,
-        });
+        const { data, status } = await axios.post(
+          'https://ponder.buffer.finance/',
+          {
+            query,
+          }
+        );
 
         if (status !== 200) {
           throw new Error('Failed to fetch season total data');
         }
-        return data?.data?.totalDatas[0];
+        return data?.data?.totalDatas.items[0];
       } catch (e) {
         console.log(e);
       }
