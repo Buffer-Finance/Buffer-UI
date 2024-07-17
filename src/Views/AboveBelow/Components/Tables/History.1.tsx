@@ -192,7 +192,6 @@ export const History: React.FC<{
                 unit={trade.market.poolInfo.token}
                 className="!justify-start"
               />
-              <JackpotChip jackpote18={jackpote18} />
             </div>
             <div
               className={`flex items-center ${isTradeLost ? 'red' : 'green'}`}

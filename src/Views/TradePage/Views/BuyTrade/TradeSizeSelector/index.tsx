@@ -117,44 +117,11 @@ export const PlatfromFeeError = ({
   let jackpotEligibilityValue =
     jackpotValue?.minSizes?.[tradeToken]?.toString() ?? '100';
   jackpotEligibilityValue = divide(jackpotEligibilityValue, denominator);
-  console.log(`index-jackpotEligibilityValue: `, jackpotEligibilityValue);
-  const jackpotEligible = gte(tradeSize || '0', jackpotEligibilityValue || '1');
   const notEnoughForTrade = gt(tradeSize || '0', balance);
   const notEnooghForFee = gt(add(tradeSize || '0', platfromFee), balance);
   const isError = notEnooghForFee;
 
-  const JackpotChip = tradeSize ? (
-    <div className="ml-auto flex items-center gap-1">
-      {jackpotEligible ? (
-        <>
-          <LightToolTipSVG className="mt-[2px]" />
-          Eligible for{' '}
-          <Link to="/Jackpot" className="hover:underline hover:cursor-pointer">
-            Jackpot
-          </Link>{' '}
-          💰{' '}
-        </>
-      ) : (
-        <>
-          <LightToolTipSVG className="mt-[2px]" />
-          Add {Math.ceil(
-            +subtract(jackpotEligibilityValue, tradeSize || '0')
-          )}{' '}
-          for
-          <Link to="/Jackpot" className="hover:underline hover:cursor-pointer">
-            Jackpot
-          </Link>{' '}
-          💰{' '}
-        </>
-      )}
-    </div>
-  ) : null;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
-  console.log(
-    `index-notEnooghForFee && notEnoughForTrade: `,
-    notEnooghForFee && notEnoughForTrade
-  );
-  console.log(`index-isError: `, isError);
   return (
     <RowGapItemsTop
       gap="2px"
@@ -173,7 +140,6 @@ export const PlatfromFeeError = ({
             <LightToolTipSVG className="mt-[2px]" />
             Platform fee : + {platfromFee} {tradeToken}
           </span>
-          <span>{JackpotChip}</span>
         </div>
       )}
     </RowGapItemsTop>
