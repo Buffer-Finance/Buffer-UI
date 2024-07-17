@@ -19,7 +19,7 @@ const TradeData: React.FC<{ trade: TradeType }> = ({ trade }) => {
         );
       }}
     >
-      <InfoIcon tooltip="Get the full trade information." sm />
+      <InfoIcon tooltip="Open trade as JSON" sm />
     </button>
   );
 };

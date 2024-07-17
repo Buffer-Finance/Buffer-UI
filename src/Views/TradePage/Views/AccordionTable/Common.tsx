@@ -186,9 +186,7 @@ export const StrikePriceComponent = ({
           />
         </div>
       ) : null}
-      {pathname.includes('/trades') || pathname.includes('/history') ? (
-        <TradeData trade={trade} />
-      ) : null}
+      <TradeData trade={trade} />
       {/* {trade.state == 'QUEUED' ? 'queued' : null} */}
     </div>
   );
