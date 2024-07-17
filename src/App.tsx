@@ -220,7 +220,7 @@ const AppRoutes = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/dashboard"
           element={
             <Suspense fallback={<PageLoader />}>
@@ -236,7 +236,7 @@ const AppRoutes = () => {
               </Suspense>
             }
           />
-        </Route>
+        </Route> */}
         <Route
           path="/referral"
           element={

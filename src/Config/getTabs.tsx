@@ -364,12 +364,12 @@ export const getTabs = (
         subTabs: [],
         isExternalLink: true,
       },
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
       {
         to: `https://optopi.buffer.finance/`,
         name: 'Optopi NFT',
@@ -493,12 +493,12 @@ export const getTabs = (
         isExternalLink: false,
       },
 
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      // },
 
       {
         to: `https://stats.buffer.finance/`,
@@ -621,13 +621,13 @@ export const getMobileTabs = (
         icon: TabIcon.NFT,
       },
 
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-        icon: TabIcon.Dashboard,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      //   icon: TabIcon.Dashboard,
+      // },
       {
         to: `/referral`,
         name: 'Referral',
@@ -750,13 +750,13 @@ export const getMobileTabs = (
         icon: TabIcon.Leaderbaord,
       },
 
-      {
-        to: `/dashboard`,
-        name: 'Dashboard',
-        subTabs: [],
-        isExternalLink: false,
-        icon: TabIcon.Dashboard,
-      },
+      // {
+      //   to: `/dashboard`,
+      //   name: 'Dashboard',
+      //   subTabs: [],
+      //   isExternalLink: false,
+      //   icon: TabIcon.Dashboard,
+      // },
       {
         to: `/referral`,
         name: 'Referral',
