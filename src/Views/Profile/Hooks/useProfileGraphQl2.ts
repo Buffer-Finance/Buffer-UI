@@ -101,13 +101,18 @@ export const useProfileGraphQl2 = (product: Products) => {
         optionContract: { asset },
       } = curr;
       acc.totalNonActiveTrades += tradeCount - tradesOpen;
-      console.log(`acc.totalNonActiveTrades: `, acc.totalNonActiveTrades);
+      console.log(
+        `acc.totalNonActiveTrades: `,
+        acc.totalNonActiveTrades,
+        tradesWon
+      );
 
-      acc.totalTradesWon += tradesWon;
+      acc.totalTradesWon += +tradesWon;
+
       if (acc.tradesByasset[asset] !== undefined) {
-        acc.tradesByasset[asset] += tradeCount;
+        acc.tradesByasset[asset] += +tradeCount;
       } else {
-        acc.tradesByasset[asset] = tradeCount;
+        acc.tradesByasset[asset] = +tradeCount;
       }
       if (acc[token]) {
         acc[token].payout = add(acc[token].payout, payout);
