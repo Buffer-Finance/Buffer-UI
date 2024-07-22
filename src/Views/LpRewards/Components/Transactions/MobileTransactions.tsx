@@ -187,14 +187,14 @@ const Tables: React.FC<{
         Accordian(row, data?.blpTxns, activePool, activeChain)
       }
       activePage={activePage}
-      count={
-        activeTab === 'all'
-          ? data?.totalTxns[0]?.totalTxns
-            ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
-            : undefined
-          : undefined
-      }
-      onPageChange={(_, page) => setActivePage(page)}
+      // count={
+      //   activeTab === 'all'
+      //     ? data?.totalTxns[0]?.totalTxns
+      //       ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
+      //       : undefined
+      //     : undefined
+      // }
+      // onPageChange={(_, page) => setActivePage(page)}
     />
   );
 };

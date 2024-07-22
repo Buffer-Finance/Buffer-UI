@@ -5,23 +5,25 @@ import { Chain } from 'wagmi';
 import { blpPrice, poolsType } from '../types';
 
 export const useBlpRate = (activeChain: Chain, activePool: poolsType) => {
-  const graphUrl = getConfig(activeChain.id).graph.LP;
+  const graphUrl = 'http://ponder.buffer.finance/';
 
   return useSWR<blpPrice>(`${activeChain}-${activePool}-blp-rate`, {
     fetcher: async () => {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
                 blpPrices(where: {id: "current${poolName}"}) {
-                    price
+                    items{
+                      price
                     tokenXamount
                     blpAmount
                     poolName
+                    }
                 }
             }`;
       try {
         const { data, status } = await axios.post(graphUrl, { query });
         if (status === 200) {
-          return data.data.blpPrices[0];
+          return data.data.blpPrices.items[0];
         } else {
           throw new Error('Failed to fetch pool transactions');
         }

@@ -153,14 +153,14 @@ export const Table: React.FC<{
         />
       }
       activePage={activePage}
-      count={
-        data?.totalTxns[0]?.totalTxns
-          ? parseInt(data.totalTxns[0].totalTxns) % 10 === 0
-            ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
-            : Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10) + 1
-          : undefined
-      }
-      onPageChange={(_, page) => setActivePage(page)}
+      // count={
+      //   data?.totalTxns[0]?.totalTxns
+      //     ? parseInt(data.totalTxns[0].totalTxns) % 10 === 0
+      //       ? Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10)
+      //       : Math.floor(parseInt(data.totalTxns[0].totalTxns) / 10) + 1
+      //     : undefined
+      // }
+      // onPageChange={(_, page) => setActivePage(page)}
     />
   );
 };

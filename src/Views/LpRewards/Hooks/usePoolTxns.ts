@@ -11,7 +11,7 @@ export const usePoolTxns = (
   activeTab: transactionTabType,
   activePage: number
 ) => {
-  const graphUrl = getConfig(activeChain.id).graph.LP;
+  const graphUrl = 'http://ponder.buffer.finance/';
   const { address } = useUserAccount();
 
   return useSWR<{ blpTxns: poolTxn[]; totalTxns: { totalTxns: string }[] }>(
@@ -31,12 +31,12 @@ export const usePoolTxns = (
           activeTab === 'my' ? `pool${address?.toLowerCase()}` : 'poolTotal';
         const query = `{
                 blpTxns(
-                    first: 10
-                    skip: ${skip}
-                    orderBy: timestamp
-                    orderDirection: desc
+                    limit: 1000,
+                    orderBy: "timestamp",
+                    orderDirection: "desc",
                     where: {poolName: "${poolName}"  ${userAddressQuery}}
                   ) {
+                  items{
                     userAddress
                     timestamp
                     amount
@@ -47,14 +47,22 @@ export const usePoolTxns = (
                     txnHash
                     poolName
                   }
+                  }
                   totalTxns(where:{id:"${totalTxnsId}"}){
-                    totalTxns
+                    items{
+                      totalTxns
+                    }
                   }
             }`;
         try {
           const { data, status } = await axios.post(graphUrl, { query });
+          console.log(`data: `, data);
           if (status === 200) {
-            return data.data;
+            const returnResponse = {
+              blpTxns: data.data.blpTxns.items,
+              totalTxns: data.data.totalTxns.items,
+            };
+            return returnResponse;
           } else {
             throw new Error('Failed to fetch pool transactions');
           }

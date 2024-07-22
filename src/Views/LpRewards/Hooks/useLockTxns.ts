@@ -4,9 +4,10 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { Chain } from 'wagmi';
 import { lockTxn, poolsType } from '../types';
+import { getAddress } from 'viem';
 
 export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
-  const graphUrl = getConfig(activeChain.id).graph.LP;
+  const graphUrl = 'http://ponder.buffer.finance/';
   const { address } = useUserAccount();
 
   return useSWR<{ nftPoolTxns: lockTxn[]; totalTxns: { totalTxns: string }[] }>(
@@ -22,11 +23,14 @@ export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
 
         const query = `{
                 nftPoolTxns(
-                    first: 10000
-                    orderBy: timestamp
-                    orderDirection: desc
-                    where: {poolName: "${poolName}",userAddress:"${address}",isWithdrawn:false}
+                    limit: 1000,
+                    orderBy: "timestamp",
+                    orderDirection: "desc",
+                    where: {poolName: "${poolName}",userAddress:"${getAddress(
+          address
+        )}",isWithdrawn:false}
                   ) {
+                   items{
                     userAddress
                     timestamp
                     amount
@@ -34,16 +38,23 @@ export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
                     txnHash
                     poolName
                     nftId
+                   }
                   }
                 totalTxns(where:{id:"lock${address.toLowerCase()}"}){
-                  totalTxns
+                  items{
+                    totalTxns
+                  }
                 }
             }`;
         try {
           const { data, status } = await axios.post(graphUrl, { query });
 
           if (status === 200) {
-            return data.data;
+            const returnResponse = {
+              nftPoolTxns: data.data.nftPoolTxns.items,
+              totalTxns: data.data.totalTxns.items,
+            };
+            return returnResponse;
           } else if (data.data.errors) {
             throw new Error(data.data.errors[0].message);
           } else {

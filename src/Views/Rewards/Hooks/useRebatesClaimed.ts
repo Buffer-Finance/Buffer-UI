@@ -29,9 +29,12 @@ items{
             }
             `;
       try {
-        const { data, status } = await axios.post('http://localhost:42069/', {
-          query,
-        });
+        const { data, status } = await axios.post(
+          'http://ponder.buffer.finance/',
+          {
+            query,
+          }
+        );
 
         if (status !== 200) {
           throw new Error('Failed to fetch season total data');
