@@ -5,7 +5,7 @@ import { Chain } from 'wagmi';
 import { blpPrice, poolsType } from '../types';
 
 export const useBlpRate = (activeChain: Chain, activePool: poolsType) => {
-  const graphUrl = 'http://ponder.buffer.finance/';
+  const graphUrl = 'https://ponder.buffer.finance/';
 
   return useSWR<blpPrice>(`${activeChain}-${activePool}-blp-rate`, {
     fetcher: async () => {

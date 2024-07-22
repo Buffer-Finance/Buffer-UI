@@ -11,7 +11,7 @@ import { getAddress } from 'viem';
 export const useProfileGraphQl2 = (product: Products) => {
   const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
-  const graphUrl = 'http://ponder.buffer.finance/';
+  const graphUrl = 'https://ponder.buffer.finance/';
   const queryName = product === 'Up/Down' ? 'udOptionStats' : 'abOptionStats';
   console.log(`product: `, product);
   async function fetchData(account: string | undefined) {

@@ -8,7 +8,7 @@ export const useCurrentPoolStats = (
   activeChain: Chain,
   activePool: poolsType
 ) => {
-  const graphUrl = 'http://ponder.buffer.finance/';
+  const graphUrl = 'https://ponder.buffer.finance/';
 
   return useSWR<poolStats>(`${activeChain}-${activePool}-blp-current-stats`, {
     fetcher: async () => {

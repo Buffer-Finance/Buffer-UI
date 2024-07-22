@@ -11,7 +11,7 @@ export const usePoolTxns = (
   activeTab: transactionTabType,
   activePage: number
 ) => {
-  const graphUrl = 'http://ponder.buffer.finance/';
+  const graphUrl = 'https://ponder.buffer.finance/';
   const { address } = useUserAccount();
 
   return useSWR<{ blpTxns: poolTxn[]; totalTxns: { totalTxns: string }[] }>(

@@ -37,6 +37,7 @@ const usePlatformEvent = () => {
   //   },
   //   refreshInterval: 1000,
   // });
+  return { data: emptyArr };
 };
 const usePlatformEventAB = () => {
   // const { activeChain } = useActiveChain();
@@ -70,7 +71,7 @@ const usePlatformEventAB = () => {
   //   },
   //   refreshInterval: 1000,
   // });
-  return null;
+  return { data: emptyArr };
 };
 
 export { usePlatformEvent, usePlatformEventAB };
