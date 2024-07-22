@@ -16,8 +16,10 @@ export const PoolRadio: React.FC = () => {
     if (!markets) return [];
     const assetsSet = new Set<poolInfoType>();
     markets.forEach((market) => {
+      if (market.poolInfo.token === 'USDC.e') return;
       assetsSet.add(market.poolInfo);
     });
+
     return Array.from(assetsSet);
   }, [markets]);
 

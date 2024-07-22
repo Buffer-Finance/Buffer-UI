@@ -37,12 +37,17 @@ export const aboveBelowActiveMarketsAtom = atom<marketTypeAB[]>((get) => {
   console.log(`in-atommarkets: `, markets);
   return markets.filter((market) => {
     const [token0, token1] = urlMarket.split('-');
-    if (market.token0 === token0 && market.token1 === token1) return true;
+    if (
+      market.token0 === token0 &&
+      market.token1 === token1 &&
+      market.poolInfo.token != 'USDC.e'
+    )
+      return true;
   });
 });
 
 export const setSelectedPoolForTradeAtom = atomWithStorage<string>(
-  'fdsaf2',
+  'fdsaf2-v32',
   'USDC'
 );
 export const selectedPoolActiveMarketAtom = atom<marketTypeAB | undefined>(

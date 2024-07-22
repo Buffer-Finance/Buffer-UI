@@ -28,6 +28,7 @@ export const PoolRadio: React.FC = () => {
         );
       });
     });
+    assetsSet.delete('USDC.e');
     return Array.from(assetsSet);
   }, [markets]);
 
