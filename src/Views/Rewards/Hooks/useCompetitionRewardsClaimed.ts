@@ -3,6 +3,7 @@ import { useUserAccount } from '@Hooks/useUserAccount';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
 import axios from 'axios';
 import useSWR from 'swr';
+import { getAddress } from 'viem';
 
 export const useCompetitionRewardsClaimed = () => {
   const { activeChain } = useActiveChain();
@@ -15,30 +16,31 @@ export const useCompetitionRewardsClaimed = () => {
     }[]
   >(`user-competition-rewards-claimed-${activeChain.id}-${address}`, {
     fetcher: async () => {
+      if (!address) {
+        return [];
+      }
       const query = `{
-                competitionRewards(
-                  where:{
-                    user:"${address}",
-                    reward_id_not_in:[
-                      "7106022596879106890609359566186964616091349227475309561108206296319268041693"
-                      "109219560453902611034722453117112569382286050359351338846602761787810835593901",
-                      "100564573772961964144670900170771439966120133774128125317086397789480365887310"
-                  ]
-                  }) {
-                    amount
-                    reward_id
-                }
+        competitionRewards(where:{user:"${getAddress(address)}"}){
+          items{
+            rewardId
+            user
+            amount
+          }
+        }
             }
             `;
       try {
-        const { data, status } = await axios.post('http://localhot:42069/', {
+        const { data, status } = await axios.post('http://localhost:42069/', {
           query,
         });
 
         if (status !== 200) {
           throw new Error('Failed to fetch season total data');
         }
-        return data?.data?.competitionRewards;
+        return data?.data?.competitionRewards.items.map((d) => ({
+          ...d,
+          reward_id: d.rewardId,
+        }));
       } catch (e) {
         console.log(e);
       }

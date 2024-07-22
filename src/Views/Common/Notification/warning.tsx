@@ -17,7 +17,10 @@ export const Warning: React.FC<{
   if (state)
     return (
       <WarningBody
-        className={`flex font-normal sm:text-f14 text-1  background-bar-gradient text-[white] rounded-md mt-4 px-6 sm:px-5 py-4 mb-6 tab:mb-1 hover:brightness-125 w-fit mx-auto  ${className}`}
+        className={
+          className ||
+          'flex font-normal sm:text-f14 text-1  background-bar-gradient text-[white] rounded-md mt-4 px-6 sm:px-5 py-4 mb-6 tab:mb-1 hover:brightness-125 w-fit mx-auto'
+        }
       >
         <div className="warning-body">
           {body}{' '}

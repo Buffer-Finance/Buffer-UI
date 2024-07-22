@@ -399,7 +399,7 @@ function App() {
             <Warning
               body={
                 <div className="text-center">
-                  We are facing some issues with the theGraph API. Trading
+                  We are facing some issues with the Indexer APIs. Trading
                   experience on the platform may be hindered temporarily.
                 </div>
               }
