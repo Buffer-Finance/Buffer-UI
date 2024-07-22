@@ -4,7 +4,6 @@ import axios from 'axios';
 import useSWR from 'swr';
 
 const useGraphStatus = () => {
-  const { activeChain } = useActiveChain();
   const graphUrlMain = 'https://ponder.buffer.finance/status';
   const { data } = useSWR('graph-status', {
     fetcher: async () => {
