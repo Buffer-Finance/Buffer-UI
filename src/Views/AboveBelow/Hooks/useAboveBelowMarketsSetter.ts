@@ -42,7 +42,7 @@ export const useAboveBelowMarketsSetter = () => {
             maxSkew
             creationWindowContract
             circuitBreakerContract
-            iv
+            IV
             traderNFTContract
             sf
             sfdContract
@@ -90,6 +90,7 @@ export const useAboveBelowMarketsSetter = () => {
           if (!chartData) return null;
           return {
             ...option,
+            iv: option.IV,
             poolInfo: poolInfo,
             ...chartData,
           };

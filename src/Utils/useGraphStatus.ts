@@ -9,7 +9,7 @@ const useGraphStatus = () => {
   const { data } = useSWR('graph-status', {
     fetcher: async () => {
       const mainQuery = await axios.get(graphUrlMain);
-      const isError = !mainQuery.data?.arbitrum.ready;
+      const isError = mainQuery.data?.arbitrum.ready;
       return { error: isError };
     },
     refreshInterval: 5000,

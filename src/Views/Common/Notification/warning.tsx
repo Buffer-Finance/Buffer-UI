@@ -1,3 +1,4 @@
+import { cn } from '@Utils/cn';
 import styled from '@emotion/styled';
 import { CloseOutlined } from '@mui/icons-material';
 
@@ -7,22 +8,21 @@ export const Warning: React.FC<{
   closeWarning: () => void;
   shouldAllowClose?: boolean;
   className?: string;
+  bodyClassName?: string;
 }> = ({
   body,
   state = true,
   closeWarning,
   shouldAllowClose = true,
   className = '',
+  bodyClassName,
 }) => {
   if (state)
     return (
       <WarningBody
-        className={
-          className ||
-          'flex font-normal sm:text-f14 text-1  background-bar-gradient text-[white] rounded-md mt-4 px-6 sm:px-5 py-4 mb-6 tab:mb-1 hover:brightness-125 w-fit mx-auto'
-        }
+        className={`flex font-normal sm:text-f14 text-1  background-bar-gradient text-[white] rounded-md mt-4 px-6 sm:px-5 py-4 mb-6 tab:mb-1 hover:brightness-125 w-fit mx-auto  ${className}`}
       >
-        <div className="warning-body">
+        <div className={cn('warning-body', bodyClassName)}>
           {body}{' '}
           {shouldAllowClose && (
             <CloseOutlined
