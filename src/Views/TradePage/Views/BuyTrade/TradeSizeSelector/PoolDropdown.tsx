@@ -52,11 +52,13 @@ export const PoolDropdown: React.FC = () => {
       offsetY={5}
     >
       {poolNameList ? (
-        poolNameList.map((poolName) => (
-          <MenuItem onClick={onClick} value={poolName} key={poolName}>
-            {poolName}
-          </MenuItem>
-        ))
+        poolNameList
+          .filter((poolName) => poolName != 'USDC.e')
+          .map((poolName) => (
+            <MenuItem onClick={onClick} value={poolName} key={poolName}>
+              {poolName}
+            </MenuItem>
+          ))
       ) : (
         <></>
       )}
