@@ -65,40 +65,41 @@ export const useBothVersionsMarkets = () => {
   const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
-    const response = await axios.post(configData.graph.MAIN, {
+    const response = await axios.post('https://ponder.buffer.finance/', {
       query: `{ 
-        optionContracts(first:1000){
-                  config {
-                    address
-                    maxSkew
-                    creationWindowContract
-                    circuitBreakerContract
-                    iv
-                    optionStorageContract
-                    platformFee
-                    payout
-                    sfdContract
-                    sf
-                    traderNFTContract
-                    stepSize
-                  }
-                  routerContract
-                  address
-                  poolContract
-                  isPaused
-                  category
-                  asset
-                  pool
+        optionContracts(limit:1000){
+          items{
+            configContract {
+              address
+              maxFee
+              maxPeriod
+              minFee
+              minPeriod
+              platformFee
+              earlyCloseThreshold
+              isEarlyCloseEnabled
+              IV
+              IVFactorOTM
+              IVFactorITM
+              creationWindowAddress
+            }
+            routerContract
+            address
+            poolContract
+            isPaused
+            category
+            asset
+            isRegistered
+            pool
+          }
                 }
             }`,
     });
-    // console.log(`response.data?.data: `, response.data?.data);
-    // console.log(`thegraphresponse.data: `, response.data);
     return response.data?.data as response;
   }
 
   const { data, error, mutate } = useSWR<response, Error>(
-    `v3AppConfig-activeChain-ab--${activeChain.id}`,
+    `v3AppConfig-activeChain-${activeChain.id}`,
     {
       fetcher: fetcher,
       refreshInterval: 60000,
@@ -107,11 +108,12 @@ export const useBothVersionsMarkets = () => {
 
   const response = useMemo(() => {
     if (!data) return { data, error, mutate };
+
     return {
       mutate,
       error,
       data: {
-        optionContracts: data.optionContracts.filter((option) => {
+        optionContracts: data.optionContracts.items.filter((option) => {
           if (option.poolContract === null) return true;
           return (
             configData.poolsInfo[

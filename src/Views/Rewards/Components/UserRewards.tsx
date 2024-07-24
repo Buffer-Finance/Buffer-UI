@@ -19,7 +19,6 @@ import { useCompetitionRewardsClaimed } from '../Hooks/useCompetitionRewardsClai
 import { useRebatesAlloted } from '../Hooks/useRebatesAlloted';
 import { useRebatesClaimed } from '../Hooks/useRebatesClaimed';
 import { useSeasonUserData } from '../Hooks/useSeasonUserData';
-import { useWeeklyParticipentsData } from '../Hooks/useWeeklyParticipentsData';
 import { competitionRewardAddress, rebatesAddress } from '../config';
 import {
   ILeaderboardQuery,

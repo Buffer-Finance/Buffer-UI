@@ -6,20 +6,23 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 import { Products } from '../Components/ProductDropDown';
 import { getConfig } from '@Views/TradePage/utils/getConfig';
+import { getAddress } from 'viem';
 
 export const useProfileGraphQl2 = (product: Products) => {
   const { address: account } = useUserAccount();
   const { activeChain } = useActiveChain();
-  const graphUrl = getConfig(activeChain.id).graph.PROFILE;
-  const queryName = product === 'Up/Down' ? 'optionStats' : 'aboptionStats';
+  const graphUrl = 'https://ponder.buffer.finance/';
+  const queryName = product === 'Up/Down' ? 'udOptionStats' : 'abOptionStats';
+  console.log(`product: `, product);
   async function fetchData(account: string | undefined) {
     if (!account) return null;
     const basequery = `
     userData:${queryName}(
-      first: 10000
-      where: {user: "${account.toLowerCase()}" }
+      limit: 1000
+      where: {user: "${getAddress(account)}" }
     ){
-    user
+    items{
+      user
     optionContract {
       asset
     }
@@ -27,13 +30,14 @@ export const useProfileGraphQl2 = (product: Products) => {
     tradeCount
     openInterest
     volume
-    volume_usd
+    volumeUsd
     payout
-    payout_usd
+    payoutUsd
     netPnl
-    netPnl_usd
+    netPnlUsd
     tradesWon
     tradesOpen
+    }
     }
     `;
 
@@ -46,7 +50,7 @@ export const useProfileGraphQl2 = (product: Products) => {
       query,
     });
 
-    let responseData = response.data?.data?.userData;
+    let responseData = response.data?.data?.userData.items;
 
     return responseData as Response[];
   }
@@ -97,13 +101,18 @@ export const useProfileGraphQl2 = (product: Products) => {
         optionContract: { asset },
       } = curr;
       acc.totalNonActiveTrades += tradeCount - tradesOpen;
-      console.log(`acc.totalNonActiveTrades: `, acc.totalNonActiveTrades);
+      console.log(
+        `acc.totalNonActiveTrades: `,
+        acc.totalNonActiveTrades,
+        tradesWon
+      );
 
-      acc.totalTradesWon += tradesWon;
+      acc.totalTradesWon += +tradesWon;
+
       if (acc.tradesByasset[asset] !== undefined) {
-        acc.tradesByasset[asset] += tradeCount;
+        acc.tradesByasset[asset] += +tradeCount;
       } else {
-        acc.tradesByasset[asset] = tradeCount;
+        acc.tradesByasset[asset] = +tradeCount;
       }
       if (acc[token]) {
         acc[token].payout = add(acc[token].payout, payout);
@@ -135,11 +144,11 @@ interface Response {
   tradeCount: number;
   openInterest: string;
   volume: string;
-  volume_usd: string;
+  volumeUsd: string;
   payout: string;
-  payout_usd: string;
+  payoutUsd: string;
   netPnl: string;
-  netPnl_usd: string;
+  netPnlUsd: string;
   tradesWon: number;
   tradesOpen: number;
 }

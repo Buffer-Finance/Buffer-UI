@@ -274,7 +274,6 @@ export const AssetSelectorTable: React.FC<{
           }
           // addOrRemoveFavourite(selectedAsset, findFavourite(selectedAsset));
         }}
-        overflow
       />
     </AssetSelectorDDBackground>
   );

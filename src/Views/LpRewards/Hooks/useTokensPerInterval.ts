@@ -5,30 +5,41 @@ import { Chain } from 'viem';
 import { tokensPerInterval } from '../types';
 
 export const useTokensPerInterval = (activeChain: Chain) => {
-  const graphUrl = getConfig(activeChain.id).graph.LP;
+  const graphUrl = 'https://ponder.buffer.finance/';
   return useSWR<tokensPerInterval>(`${activeChain}-tokens-per-interval`, {
     fetcher: async () => {
       const query = `{
         usdcPerInterval:rewardsPerIntervals(
             where: {id: "USDC"}
         ) {
+           items{
             amount
+           }
           }
         lockPerInterval:rewardsPerIntervals(
             where: {id: "lock"}
         ) {
-            amount
+            items{
+              amount
+            }
           }
         lockMultiplierSettings{
-          maxLockDuration
+          items{
+            maxLockDuration
           minLockDuration
           maxLockMultiplier
+          }
         }
       }`;
       try {
         const { data, status } = await axios.post(graphUrl, { query });
         if (status === 200) {
-          return data.data;
+          const returnResponse = {
+            usdcPerInterval: data.data.usdcPerInterval.items,
+            lockPerInterval: data.data.lockPerInterval.items,
+            lockMultiplierSettings: data.data.lockMultiplierSettings.items,
+          };
+          return returnResponse;
         } else {
           throw new Error('Failed to fetch tokens per interval');
         }

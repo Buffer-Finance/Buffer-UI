@@ -5,10 +5,12 @@ import NumberTooltip from '@Views/Common/Tooltips';
 import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { Skeleton } from '@mui/material';
 import { TwoColorProgressBar } from './TwoColorProgressBar';
+import React from 'react';
 
-export const OpenInterest: React.FC<{
+export const OpenInteres: React.FC<{
   activeMarket: marketTypeAB | undefined;
 }> = ({ activeMarket }) => {
+  console.log(`OpenInterest-activeMarket: `, activeMarket);
   if (activeMarket === undefined)
     return <Skeleton className="w-[50px] !h-5 lc " />;
 
@@ -20,6 +22,7 @@ export const OpenInterest: React.FC<{
     activeMarket.openInterestDown,
     activeMarket.poolInfo.decimals
   ) as string;
+  console.log(`OpenInterest-openInterestDown: `, openInterestDown);
   const totalOpenInterest = add(openInterestUp, openInterestDown);
 
   const openInterestUpPercent =
@@ -72,3 +75,5 @@ export const OpenInterest: React.FC<{
     </div>
   );
 };
+
+export const OpenInterest = React.memo(OpenInteres);

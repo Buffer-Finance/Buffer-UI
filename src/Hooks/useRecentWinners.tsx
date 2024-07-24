@@ -92,7 +92,7 @@ const useRecentWinners = () => {
             `;
         let FetchLatestWinsQuery = -1;
         try {
-          FetchLatestWinsQuery = await axios.post(config.graph.MAIN, {
+          FetchLatestWinsQuery = await axios.post('MAIN-PONDER', {
             query: `{${topWinnersQuery}}`,
           });
         } catch (e) {

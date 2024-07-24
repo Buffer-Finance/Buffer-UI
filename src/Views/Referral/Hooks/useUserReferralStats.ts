@@ -31,8 +31,7 @@ export const useUserReferralStats = () => {
   );
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
-  const graphUrl =
-    'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/api';
+  const graphUrl = 'https://ponder.buffer.finance/';
   const queryFields = useMemo(() => {
     if (tokens.length > 1)
       return tokens.map((poolName) => getTokenXQueryFields(poolName)).join(' ');
@@ -43,19 +42,21 @@ export const useUserReferralStats = () => {
     fetcher: async () => {
       const response = await axios.post(graphUrl, {
         query: `{
-              referralDatas (where: { id: "${address}"} ) {
+              referralDatas (where: { user: "${address}"} ) {
+                items{
                 totalTradesReferred
                 totalVolumeOfReferredTrades
                 totalRebateEarned
                 totalTradingVolume
                 totalDiscountAvailed
                 ${queryFields}
+                }
               }
             }
             `,
       });
       return (
-        response.data?.data?.referralDatas?.[0] || {
+        response.data?.data?.referralDatas.items?.[0] || {
           totalTradesReferred: '0',
           totalVolumeOfReferredTrades: '0',
           totalRebateEarned: '0',

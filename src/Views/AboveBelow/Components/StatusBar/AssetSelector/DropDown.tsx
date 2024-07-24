@@ -35,7 +35,7 @@ export const DropDown: React.FC<{
 
   return (
     <AssetSelectorDDBackground>
-      <ColumnGap gap="16px">
+      <ColumnGap gap="16px" className="max-h-[404px]">
         <SearchBar />
         {!isMobile && (
           <RowBetween>

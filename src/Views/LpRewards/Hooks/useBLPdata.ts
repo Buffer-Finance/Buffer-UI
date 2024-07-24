@@ -33,8 +33,6 @@ export type blpData = blpPrice & {
 };
 
 export function useBlpData(activeChain: Chain, activePool: poolsType) {
-  const graphUrl = getConfig(activeChain.id).graph.LP;
-
   const {
     data,
     isValidating: loading,
@@ -44,21 +42,28 @@ export function useBlpData(activeChain: Chain, activePool: poolsType) {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
                     blpPrices(
-                        first:10000
-                        orderBy: timestamp
-                        orderDirection: desc
+                        limit:1000,
+                        orderBy: "timestamp",
+                        orderDirection: "desc",
                         where: {id_not: "current${poolName}"}) {
+                       items{
                         price
                         tokenXamount
                         blpAmount
                         poolName
                         timestamp
+                       }
                     }
                 }`;
       try {
-        const { data, status } = await axios.post(graphUrl, { query });
+        const { data, status } = await axios.post(
+          'https://ponder.buffer.finance/',
+          {
+            query,
+          }
+        );
         if (status === 200) {
-          return data.data.blpPrices;
+          return data.data.blpPrices.items;
         } else {
           throw new Error('Failed to fetch pool transactions');
         }

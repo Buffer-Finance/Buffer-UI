@@ -9,6 +9,8 @@ import { OpenInterest } from './OpenInterest';
 export const MarketData: React.FC<{
   activeMarket: marketTypeAB | undefined;
 }> = ({ activeMarket }) => {
+  console.log(`index-activeMarket: `, activeMarket);
+
   const { oneDayVolume } = useOneDayVolume();
   const dataArray = [
     { head: '24h change', data: <OneDayChange activeMarket={activeMarket} /> },
@@ -17,25 +19,26 @@ export const MarketData: React.FC<{
       data: <IV activeMarket={activeMarket} />,
     },
     {
+      head: 'Bullish/Bearish',
+      data: <OpenInterest activeMarket={activeMarket} />,
+    },
+    {
       head: 'Volume 24 hrs',
       data: (
         <OneDayVolume activeMarket={activeMarket} oneDayVolume={oneDayVolume} />
       ),
     },
-
-    {
-      head: 'Bullish/Bearish',
-      data: <OpenInterest activeMarket={activeMarket} />,
-    },
   ];
+  console.log(`index-dataArray: `, dataArray);
 
   let volume = undefined;
   if (activeMarket !== undefined && oneDayVolume !== undefined) {
     volume = oneDayVolume[getAddress(activeMarket.address)];
+    console.log(`index-oneDayVolume: `, oneDayVolume, activeMarket.address);
   }
   const filteredDataArray = [...dataArray];
   if (volume === undefined || volume == '0') {
-    filteredDataArray.splice(2, 2);
+    filteredDataArray.splice(3, 1);
   }
 
   return (

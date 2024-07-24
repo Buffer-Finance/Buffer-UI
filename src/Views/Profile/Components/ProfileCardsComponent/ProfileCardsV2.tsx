@@ -30,9 +30,9 @@ export const ProfileCardsV2 = () => {
       Cards={[
         <Referral data={data} heading={'Referral Metrics'} />,
         <TradingCardV2
-          data={metrics?.['USDC.e']}
+          data={metrics?.['USDC']}
           heading={'USDC Trading Metrics'}
-          tokenName="USDC.e"
+          tokenName="USDC"
         />,
         <ArbitrumOnly hide>
           <TradingCardV2

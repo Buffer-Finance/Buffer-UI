@@ -23,64 +23,41 @@ export const useAboveBelowMarketsSetter = () => {
     optionContracts: responseAB[];
     allContracts: responseAB[];
   }> {
-    const response = await axios.post(configData.graph.ABOVE_BELOW, {
+    const response = await axios.post('https://ponder.buffer.finance/', {
       query: `{ 
-        optionContracts(first:10000,where:{routerContract:"${configData.above_below_router}"}) {
+        optionContracts(limit:1000,where:{routerContract:"${configData.above_below_router}"}) {
+         items{
+          address
+          token1
+          token0
+          isPaused
+          routerContract
+          poolContract
+          openUp
+          openDown
+          openInterestUp
+          openInterestDown
+          configContract {
             address
-            token1
-            token0
-            isPaused
-            routerContract
-            poolContract
-            openUp
-            openDown
-            openInterestUp
-            openInterestDown
-            configContract {
-              address
-              maxSkew
-              creationWindowContract
-              circuitBreakerContract
-              iv
-              traderNFTContract
-              sf
-              sfdContract
-              payout
-              platformFee
-              optionStorageContract
-              stepSize
-            }
+            maxSkew
+            creationWindowContract
+            circuitBreakerContract
+            IV
+            traderNFTContract
+            sf
+            sfdContract
+            payout
+            platformFee
+            optionStorageContract
+            stepSize
           }
-          allContracts:optionContracts(first:10000) {
-            address
-            token1
-            token0
-            isPaused
-            routerContract
-            poolContract
-            openUp
-            openDown
-            openInterestUp
-            openInterestDown
-            configContract {
-              address
-              maxSkew
-              creationWindowContract
-              circuitBreakerContract
-              iv
-              traderNFTContract
-              sf
-              sfdContract
-              payout
-              platformFee
-              optionStorageContract
-              stepSize
-            }
+         }
           }
+        
         }`,
     });
 
-    console.log(`response: `, configData.above_below_router);
+    console.log(`response: `, response.data);
     return response.data?.data as {
       optionContracts: responseAB[];
       allContracts: responseAB[];
@@ -97,7 +74,7 @@ export const useAboveBelowMarketsSetter = () => {
   useEffect(() => {
     console.log('data.optionContracts', data);
     if (data?.optionContracts) {
-      const filteredMarkets = data.optionContracts
+      const filteredMarkets = data.optionContracts.items
         .map((option) => {
           const poolInfo =
             configData.poolsInfo[
@@ -113,6 +90,7 @@ export const useAboveBelowMarketsSetter = () => {
           if (!chartData) return null;
           return {
             ...option,
+            iv: option.IV,
             poolInfo: poolInfo,
             ...chartData,
           };
@@ -120,29 +98,5 @@ export const useAboveBelowMarketsSetter = () => {
         .filter((option) => option !== null) as marketTypeAB[];
       setMarkets(filteredMarkets);
     }
-    if (data?.allContracts)
-      setAllMarkets(
-        data.allContracts
-          .map((option) => {
-            const poolInfo =
-              configData.poolsInfo[
-                getAddress(
-                  option.poolContract
-                ) as keyof typeof configData.poolsInfo
-              ];
-            if (!poolInfo) return null;
-            const chartData =
-              marketsForChart[
-                (option.token0 + option.token1) as keyof typeof marketsForChart
-              ];
-            if (!chartData) return null;
-            return {
-              ...option,
-              poolInfo: poolInfo,
-              ...chartData,
-            };
-          })
-          .filter((option) => option !== null) as marketTypeAB[]
-      );
   }, [data, activeChain]);
 };

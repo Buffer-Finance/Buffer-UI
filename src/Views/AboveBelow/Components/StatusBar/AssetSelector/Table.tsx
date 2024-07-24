@@ -172,7 +172,7 @@ export const Table: React.FC<{
         const volume = oneDayVolume?.[getAddress(market.address)];
         return (
           <Display
-            data={formatBalance(divide(volume ?? '0', decimals) as string)}
+            data={divide(volume ?? '0', decimals)}
             precision={2}
             unit={market.poolInfo.token}
             disable
@@ -207,13 +207,14 @@ export const Table: React.FC<{
   };
 
   return (
-    <AssetSelectorDDBackground>
+    <AssetSelectorDDBackground className="overflow-y-auto scrollbar-heavy">
       <BufferTable
         widths={['1%', 'auto', 'auto', 'auto', 'auto', 'auto', 'auto']}
         headerJSX={HeadFormatter}
         cols={isMobile ? 3 : headers.length}
         shouldShowMobile
         rows={filteredMarkets?.length || 0}
+        overflow
         bodyJSX={BodyFormatter}
         tableClass="b1200:!w-full assetSelectorTableWidth"
         error={<TableErrorRow msg="No Assets found." />}
@@ -231,7 +232,6 @@ export const Table: React.FC<{
             onMarketSelect?.();
           }
         }}
-        overflow
         shouldHideHeader={isMobile}
       />
     </AssetSelectorDDBackground>

@@ -6,9 +6,8 @@ import useSWR from 'swr';
 
 export const Participants: React.FC<{
   dayId: number;
-  graphUrl: string;
-  count: number | string;
-}> = ({ dayId, graphUrl, count }) => {
+  count: number | string | undefined;
+}> = ({ dayId, count }) => {
   // const { data } = useTotalData(dayId, graphUrl);
   if (count === undefined) return <Skeleton className="w-[50px] !h-6 lc " />;
   const totalparticipents = count;
@@ -18,9 +17,8 @@ export const Participants: React.FC<{
 
 export const TotalTrades: React.FC<{
   dayId: number;
-  graphUrl: string;
   count: string | undefined;
-}> = ({ graphUrl, dayId, count }) => {
+}> = ({ dayId, count }) => {
   if (count === undefined) return <Skeleton className="w-[50px] !h-6 lc " />;
 
   return <div>{count}</div>;
@@ -29,8 +27,7 @@ export const TotalTrades: React.FC<{
 export const TotalVolume: React.FC<{
   dayId: number;
   volume: string | undefined;
-  graphUrl: string;
-}> = ({ dayId, graphUrl, volume }) => {
+}> = ({ volume }) => {
   const totalVolume = volume;
   if (!totalVolume) return <Skeleton className="w-[50px] !h-6 lc " />;
   return <div>{toFixed(divide(totalVolume, 6) as string, 2)} USDC</div>;

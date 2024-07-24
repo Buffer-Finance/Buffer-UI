@@ -466,6 +466,7 @@ export const Probability: React.FC<{
   trade: TradeType;
   marketPrice: any;
 }> = ({ marketPrice, trade }) => {
+  console.log(`OngoingTradesTable-trade: `, trade);
   const IV =
     calculateOptionIV(
       trade.is_above ?? false,

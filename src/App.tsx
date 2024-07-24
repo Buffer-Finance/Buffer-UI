@@ -50,7 +50,7 @@ import AllTime from '@Views/V2-Leaderboard/Components/AllTime';
 import Leagues from '@Views/V2-Leaderboard/Leagues';
 import Incentivised from '@Views/V2-Leaderboard/Incentivised';
 import { Galxe } from '@Views/V2-Leaderboard/Galxe';
-import { Launch } from '@mui/icons-material';
+import { Launch, WarningOutlined } from '@mui/icons-material';
 import { usePriceRetriable } from '@Hooks/usePrice';
 
 import TradePage from '@Views/TradePage';
@@ -396,15 +396,16 @@ function App() {
           {graphStatus && (
             <Warning
               body={
-                <div className="text-center">
-                  We are facing some issues with the theGraph API. Trading
-                  experience on the platform may be hindered temporarily.
+                <div className="text-center !text-1">
+                  <WarningOutlined className="text-[#f3cf34]" /> We are facing
+                  some issues with the Indexer APIs. Trading experience on the
+                  platform may be hindered temporarily.
                 </div>
               }
               closeWarning={() => {}}
               shouldAllowClose={false}
               state={graphStatus.error}
-              className="disclaimer !bg-[#f3cf34] !text-[black] !text-f16 !p-2 !text-semibold hover:!brightness-100"
+              className="disclaimer   !text-1 !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
           )}
           <Navbar />

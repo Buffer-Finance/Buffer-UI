@@ -37,7 +37,6 @@ export const BarData: React.FC<{
   setOffset,
   activeChainId,
   league,
-  graphUrl,
   weekId,
 }) => {
   const { address: account } = useUserAccount();
@@ -117,7 +116,7 @@ export const BarData: React.FC<{
       />
       <Col
         head={'Your League'}
-        desc={<League graphUrl={graphUrl} weekId={weekId} />}
+        desc={<League weekId={weekId} />}
         descClass={descClass}
         headClass={headClass}
         className="winner-card"
@@ -182,8 +181,7 @@ export const TotalVolume: React.FC<{
 
 export const League: React.FC<{
   weekId: number;
-  graphUrl: string;
-}> = ({ weekId, graphUrl }) => {
+}> = ({ weekId }) => {
   const { address: userAddress } = useUserAccount();
   const { data } = useDailyLeaderboardData('Bronze');
 

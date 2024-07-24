@@ -64,7 +64,7 @@ const useNoLossTournaments = () => {
         }
         `;
       console.log(`basicQuery: `, basicQuery);
-      const response = await axios.post(config.graph.MAIN, {
+      const response = await axios.post('MAIN-PONDER', {
         query: `{${basicQuery}}`,
       });
       let tids = {};

@@ -36,6 +36,7 @@ export const useAssetTableFilters = (group?: string) => {
   const searchValue = useAtomValue(searchBarAtom);
   const favouriteMarkets = useAtomValue(favouriteMarketsAtom);
   const allmarkets = useMarketsWithChartData();
+  console.log(`allmarkets: `, allmarkets);
   const markets = useMemo(() => {
     return allmarkets.filter((market) => market.isRegistered);
   }, [allmarkets]);
