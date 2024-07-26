@@ -325,16 +325,16 @@ export const durations = [
     time: '00:15',
     name: ['15m'],
   },
-  // {
-  //   duration: 60 * 60,
-  //   time: '01:00',
-  //   name: ['1h'],
-  // },
   {
-    duration: 4 * 60 * 60,
-    time: '04:00',
-    name: ['4h'],
+    duration: 60 * 60,
+    time: '01:00',
+    name: ['1h'],
   },
+  // {
+  //   duration: 4 * 60 * 60,
+  //   time: '04:00',
+  //   name: ['4h'],
+  // },
 ];
 
 export const SLIPPAGE_DEFAULTS = [0.05, 0.25, 0.5];

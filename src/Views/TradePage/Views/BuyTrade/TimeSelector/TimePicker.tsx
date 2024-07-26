@@ -147,9 +147,9 @@ const TimerError: React.FC<{
 
   useEffect(() => {
     if (HHMMToSeconds(currentTime) > HHMMToSeconds(maxDuration)) {
-      setError(`Maximum duration is ${maxDuration}`);
+      setError(`Maximum duration is ${maxDuration} Hours`);
     } else if (HHMMToSeconds(currentTime) < HHMMToSeconds(minDuration)) {
-      setError(`Minimum duration is ${minDuration}`);
+      setError(`Minimum duration is ${minDuration} Hours`);
     } else {
       setError(null);
     }
