@@ -80,7 +80,7 @@ export const categoriesAtom = atom<string>('all');
 
 export const searchBarAtom = atom('');
 
-export const radioValueAtom = atom('USDC.e');
+export const radioValueAtom = atom('USDC');
 
 export const chartNumberAtom = atomWithStorage('hello', 1);
 export const tradeTypeAtom = atom<'Market' | 'Limit'>('Market');
