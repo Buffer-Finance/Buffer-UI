@@ -14,6 +14,8 @@ import { formatDateWithTime, getTimestamps } from './helpers';
 import { isExpiryStale } from '@TV/utils';
 import { getDistance, Variables } from '@Utils/Time';
 import { formatDistance } from '@Hooks/Utilities/useStopWatch';
+import { ArrowDropDownRounded } from '@mui/icons-material';
+import { cn } from '@Utils/cn';
 
 export const DropDown = () => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
@@ -40,12 +42,13 @@ export const DropDown = () => {
   return (
     <MenuBackground>
       <Menu
+        transition
         menuButton={({ open }) => {
           return (
             <MenuButton
               className={
                 (staleExpiry ? 'wrong-selection' : '') +
-                ` !bg-[#282B39] px-5 pl-6 !w-full rounded-[2px] py-2 text-f14 text-[#C3C2D4]  font-medium`
+                ` !bg-[#282b3996] hover:brightness-125 px-5 pl-6 !w-full rounded-[10px] dd-border py-2 text-f14 text-[#C3C2D4]  font-medium `
               }
             >
               <RowGap gap="8px" className="w-full">
@@ -54,24 +57,24 @@ export const DropDown = () => {
                       Variables(getDistance(+selectedTimestamp / 1000))
                     )})`
                   : 'Select Expiry (UTC)'}
-                <DDarrow open={open} className="scale-125 ml-5" />
+                <ArrowDropDownRounded
+                  className={cn(
+                    'scale-150 ml-2 transition-transform',
+                    open && 'rotate-180'
+                  )}
+                />
               </RowGap>
             </MenuButton>
           );
         }}
         position="auto"
         align="center"
-        menuClassName={'!w-fit !bg-[#282B39] '}
+        menuClassName={'!w-fit !bg-[#22242e] '}
         offsetY={5}
       >
         {timestamps.map((timestamp) => {
           return (
-            <MenuItem
-              key={timestamp}
-              onClick={onClick}
-              value={timestamp}
-              className={'hover:bg-4'}
-            >
+            <MenuItem key={timestamp} onClick={onClick} value={timestamp}>
               {formatDateWithTime(timestamp)}
               {`  (${formatDistance(
                 Variables(getDistance(+timestamp / 1000))
@@ -88,13 +91,15 @@ export const DropDown = () => {
 const menuItemClassName = ({
   disabled,
   hover,
+  checked,
 }: {
   disabled: boolean;
   hover: boolean;
+  checked: boolean;
 }) =>
-  `px-3 !w-full focus:outline-none text-f13 text-[#c3c2d4] ${
+  `px-3 !w-full focus:outline-none  text-f13 text-[#c3c2d4]  font-medium ${
     disabled && 'text-gray-400'
-  } ${hover && 'my-menuitem-hover'}}`;
+  } ${(checked || hover) && 'my-menuitem-hover !bg-blue font-bold '}}`;
 
 const MenuItem = (props: MenuItemProps) => (
   <MenuItemInner
