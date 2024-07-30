@@ -9,7 +9,7 @@ export const ExpiryDate: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const selectedTimestamp = useAtomValue(selectedExpiry);
 
   return (
-    <RowBetween className="my-3 sm:mb-[0px]">
+    <RowBetween className="my-3 sm:mb-[0px] whitespace-nowrap">
       <div className="text-[#969db7] text-f14 font-normal">
         Select Expiry (UTC):
         {isExpiryStale(selectedTimestamp) ? (
