@@ -12,6 +12,8 @@ import {
 import { useAtom } from 'jotai';
 import { formatDateWithTime, getTimestamps } from './helpers';
 import { isExpiryStale } from '@TV/utils';
+import { getDistance, Variables } from '@Utils/Time';
+import { formatDistance } from '@Hooks/Utilities/useStopWatch';
 
 export const DropDown = () => {
   const [selectedTimestamp, setSelectedTimestamp] = useAtom(selectedExpiry);
@@ -48,7 +50,9 @@ export const DropDown = () => {
             >
               <RowGap gap="8px" className="w-full">
                 {selectedTimestamp
-                  ? formatDateWithTime(selectedTimestamp)
+                  ? `${formatDateWithTime(selectedTimestamp)} (${formatDistance(
+                      Variables(getDistance(+selectedTimestamp / 1000))
+                    )})`
                   : 'Select Expiry (UTC)'}
                 <DDarrow open={open} className="scale-125 ml-5" />
               </RowGap>
@@ -62,8 +66,17 @@ export const DropDown = () => {
       >
         {timestamps.map((timestamp) => {
           return (
-            <MenuItem key={timestamp} onClick={onClick} value={timestamp}>
+            <MenuItem
+              key={timestamp}
+              onClick={onClick}
+              value={timestamp}
+              className={'hover:bg-4'}
+            >
               {formatDateWithTime(timestamp)}
+              {`  (${formatDistance(
+                Variables(getDistance(+timestamp / 1000))
+              )})`}
+              {/* {getDistance(Math.ceil(+timestamp / 1000))} */}
             </MenuItem>
           );
         })}
