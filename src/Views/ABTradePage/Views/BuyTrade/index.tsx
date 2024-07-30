@@ -27,7 +27,7 @@ import { zeroify } from '@Utils/NumberUtils';
 export const BuyTradeBackground = styled.div`
   position: sticky;
   top: 45px;
-  min-width: 300px;
+  min-width: 400px;
   background-color: #1c1c28;
   padding: 8px;
   display: flex;
