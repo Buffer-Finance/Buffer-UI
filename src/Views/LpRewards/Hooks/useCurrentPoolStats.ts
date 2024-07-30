@@ -14,7 +14,7 @@ export const useCurrentPoolStats = (
     fetcher: async () => {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
-                poolStats(where: {id: "current${poolName}"}) {
+                poolStats(where: {id: "current${poolName}"},limit:1000) {
                   items{
                     profit
                     loss

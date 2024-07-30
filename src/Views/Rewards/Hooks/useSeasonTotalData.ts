@@ -19,7 +19,7 @@ export const useSeasonTotalData = (weekId: number) => {
         return undefined;
       }
       const query = `{
-            totalDatas(where: {id: "total${weekId}"}) {
+            totalDatas(where: {id: "total${weekId}"},limit:1000) {
               items{
                 trades
                 volume

@@ -20,7 +20,7 @@ export const useCompetitionRewardsClaimed = () => {
         return [];
       }
       const query = `{
-        competitionRewards(where:{user:"${getAddress(address)}"}){
+        competitionRewards(where:{user:"${getAddress(address)}"},limit:1000){
           items{
             rewardId
             user

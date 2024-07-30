@@ -11,7 +11,7 @@ export const useBlpRate = (activeChain: Chain, activePool: poolsType) => {
     fetcher: async () => {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
-                blpPrices(where: {id: "current${poolName}"}) {
+                blpPrices(where: {id: "current${poolName}"},limit:1000) {
                     items{
                       price
                     tokenXamount

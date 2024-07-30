@@ -11,7 +11,7 @@ export const usePoolStats = (activeChain: Chain, activePool: poolsType) => {
     fetcher: async () => {
       const poolName = activePool === 'uBLP' ? 'USDC' : 'ARB';
       const query = `{
-                poolStats(where: {id_not: "current${poolName}",poolName:"${poolName}"}) {
+                poolStats(limit:1000,where: {id_not: "current${poolName}",poolName:"${poolName}"}) {
                    items{
                     profit
                    loss

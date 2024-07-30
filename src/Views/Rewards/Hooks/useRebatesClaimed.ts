@@ -20,7 +20,7 @@ export const useRebatesClaimed = () => {
         return [];
       }
       const query = `{
-                rebates(where:{user:"${getAddress(address)}"}) {
+                rebates(where:{user:"${getAddress(address)}"},limit:1000) {
 items{
   amount
   weekId
