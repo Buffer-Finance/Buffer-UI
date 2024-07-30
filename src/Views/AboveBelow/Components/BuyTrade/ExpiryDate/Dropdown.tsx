@@ -51,7 +51,7 @@ export const DropDown = () => {
                 ` !bg-[#282b3996] hover:brightness-125 px-5 pl-6 !w-full rounded-[10px] dd-border py-2 text-f14 text-[#C3C2D4]  font-medium `
               }
             >
-              <RowGap gap="8px" className="w-full">
+              <RowGap gap="8px" className="w-full whitespace-nowrap">
                 {selectedTimestamp
                   ? `${formatDateWithTime(selectedTimestamp)} (${formatDistance(
                       Variables(getDistance(+selectedTimestamp / 1000))
