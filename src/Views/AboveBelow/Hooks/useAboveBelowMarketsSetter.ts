@@ -57,7 +57,6 @@ export const useAboveBelowMarketsSetter = () => {
         }`,
     });
 
-    console.log(`response: `, response.data);
     return response.data?.data as {
       optionContracts: responseAB[];
       allContracts: responseAB[];

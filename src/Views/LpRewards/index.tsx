@@ -43,7 +43,6 @@ const LPRewardsPage: React.FC<{
   const { data, error } = useLPmulticalldata(activeChain, activePool);
   // if (error) return <div>Something Went wrong.Please try again.</div>;
   if (!error && !data) return <div>Loading...</div>;
-  console.log(data);
   return (
     <>
       <PoolData

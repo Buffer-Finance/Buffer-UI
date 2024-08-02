@@ -144,7 +144,6 @@ const LockButton: React.FC<{
   const [isApproving, setIsApproving] = useState<boolean>(false);
   const toastify = useToast();
   const [lock, setLock] = useAtom(lockErrorAtom);
-  console.log(`Lock-lock: `, lock);
   const handleApprove = async () => {
     if (lock != '') return toastify({ type: 'error', msg: lock });
     try {

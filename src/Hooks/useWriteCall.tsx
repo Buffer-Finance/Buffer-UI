@@ -48,7 +48,6 @@ export function useWriteCall(contractAddress: string, abi: any[]) {
   const { activeChain } = useActiveChain();
   const { data, error, isLoading, status, writeContractAsync } =
     useWriteContract({});
-  console.log(`useWriteCall-error: `, error);
   const blockExplorer = activeChain?.blockExplorers?.default?.url;
 
   const write = async (

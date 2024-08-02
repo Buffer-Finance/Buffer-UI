@@ -35,7 +35,6 @@ type BinaryOptionConfigs = {
 export function useShutterHandlers() {
   const setShutter = useSetAtom(shutterModalAtom);
   const shutterState = useAtomValue(shutterModalAtom);
-  console.log(`MobileShutter-shutterState: `, shutterState);
   const toastify = useToast();
   const closeShutter = useCallback(
     (err?: ReactNode[]) => {
@@ -80,7 +79,6 @@ const ShutterProvider: React.FC<MobileShutterProps> = (props) => {
   const { closeShutter, shutterState } = useShutterHandlers();
   const isOpen = typeof shutterState.open == 'string';
   // console.log(`MobileShutter-shutterState.open: `, shutterState.open);
-  console.log(`MobileShutter-shutterState.open : `, shutterState.open);
 
   return (
     <ShutterDrawer
@@ -110,7 +108,6 @@ export default ShutterProvider;
 
 export const TradesShutter = () => {
   const { closeShutter, shutterState } = useShutterHandlers();
-  console.log(`MobileShutter-shutterState: `, shutterState);
   const isOpen = typeof shutterState.open == 'string';
 
   return (

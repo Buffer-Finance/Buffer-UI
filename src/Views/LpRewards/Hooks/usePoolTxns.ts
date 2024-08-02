@@ -56,7 +56,6 @@ export const usePoolTxns = (
             }`;
         try {
           const { data, status } = await axios.post(graphUrl, { query });
-          console.log(`data: `, data);
           if (status === 200) {
             const returnResponse = {
               blpTxns: data.data.blpTxns.items,

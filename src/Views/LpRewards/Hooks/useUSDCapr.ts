@@ -29,7 +29,6 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
     functionName: '_wrappedBlpSupplyWithMultiplier',
     args: [],
   });
-  console.log(`data: `, wrappedBlpSupplyWithMultiplier);
   function getBLPsupplyAndPrice() {
     if (!blpData && !blpError) return null;
     if (!blpData) return undefined;
@@ -43,7 +42,6 @@ export const useUSDCapr = (activeChain: Chain, activePool: poolsType) => {
     lockDuration: number,
     isUnlocked: boolean
   ) => {
-    console.log(`lockDuration: `, lockDuration);
     if (!tokensPerInterval && !tokensPerIntervalError) {
       return null;
     }

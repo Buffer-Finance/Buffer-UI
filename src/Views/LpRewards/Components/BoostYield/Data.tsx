@@ -163,7 +163,7 @@ const WithdrawButton: React.FC<{
   const toastify = useToast();
   const [loading, setLoading] = useState(false);
   const { writeCall } = useWriteCall(contracts.nftLockPool, NFTlockPoolABI);
-
+  console.log('withdraw-debugging', withdrawAbleIds.slice(0, 10));
   async function handleClaim() {
     try {
       if (unlockedAmount === undefined)
@@ -179,10 +179,12 @@ const WithdrawButton: React.FC<{
             });
           }
         },
-        'withdrawAllFromMultiplePositions',
+        'withdrawPositions',
         [withdrawAbleIds.slice(0, 10)]
       );
     } catch (e) {
+      console.log('withdraw-debugging', e);
+
       toastify({
         type: 'error',
         msg: 'Error while claiming unlockedAmount',

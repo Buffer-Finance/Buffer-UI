@@ -457,9 +457,7 @@ const TokenAccountBalance = () => {
   const { activePool } = useAtomValue(activePoolObjAtom);
   const pools = usePoolByAsset();
   let activePoolDetails = pools[activePool];
-  console.log(`AccountDropdown-pools: `, pools);
   if (activePoolDetails === undefined) activePoolDetails = pools['USDC.E'];
-  console.log(`AccountDropdown-activePoolDetails: `, activePoolDetails);
   const { address } = useAccount();
   const { data, isError, isLoading, error } = useBalance({
     address,
