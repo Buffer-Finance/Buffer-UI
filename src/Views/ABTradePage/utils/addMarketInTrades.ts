@@ -12,6 +12,7 @@ const addMarketInTrades = (
         return pair.address.toLowerCase() === t.target_contract.toLowerCase();
       });
 
+      if (!tradeMarket) return null;
       if (!tradeMarket) return t;
       const pool = tradeMarket.poolInfo;
       if (tradeMarket?.category == 'Forex') {
