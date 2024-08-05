@@ -416,10 +416,8 @@ function App() {
             <Warning
               body={
                 <div className="text-center !text-1">
-                  <WarningOutlined className="text-[#f3cf34]" /> Trade execution
-                  might be slightly impacted by elevated gas prices temporarily,
-                  which could result in a longer than anticipated time to open
-                  and execute trades.
+                  <WarningOutlined className="text-[#f3cf34]" /> Elevated gas
+                  prices may delay trade opening and closing times temporarily.
                 </div>
               }
               closeWarning={() => {}}
