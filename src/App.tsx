@@ -444,11 +444,10 @@ function App() {
             </Alert>
           </Snackbar>
 
-          {/* <Warning
+          {!isGasPriceHigh && (
+            <Warning
               body={
                 <div className="w-fit flex items-center m-auto">
-                  
-
                   <span className="text-f14 font-extrabold  text-[white] leading-[21px] sm:text-[11px] sm:leading-[12px]">
                     {bannerCotent}
                   </span>
@@ -460,7 +459,8 @@ function App() {
               shouldAllowClose={false}
               state={!mobileWarningClosed}
               className="disclaimer !bg-[#10D2FF] !text-[#232334]"
-            /> */}
+            />
+          )}
 
           <TnCModal />
           <SideBar />
