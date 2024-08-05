@@ -443,13 +443,11 @@ function App() {
               {snack.message}
             </Alert>
           </Snackbar>
-          {
-            <Warning
+
+          {/* <Warning
               body={
                 <div className="w-fit flex items-center m-auto">
-                  {/*<span className="bg-[#232334] text-[#10D2FF] text-f11 leading-[16px] px-3 rounded-[6px] font-semibold mr-3">
-                    New
-              </span>*/}
+                  
 
                   <span className="text-f14 font-extrabold  text-[white] leading-[21px] sm:text-[11px] sm:leading-[12px]">
                     {bannerCotent}
@@ -462,8 +460,8 @@ function App() {
               shouldAllowClose={false}
               state={!mobileWarningClosed}
               className="disclaimer !bg-[#10D2FF] !text-[#232334]"
-            />
-          }
+            /> */}
+
           <TnCModal />
           <SideBar />
         </Background>
