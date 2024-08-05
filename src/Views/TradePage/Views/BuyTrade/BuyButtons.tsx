@@ -68,7 +68,6 @@ export const BuyButtons = ({
     switchPool?.pool,
     switchPool?.optionContract
   );
-  console.log(`BuyButtons-activeMarket: `, activeMarket);
   const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
 
   const { viewOnlyMode } = useUserAccount();

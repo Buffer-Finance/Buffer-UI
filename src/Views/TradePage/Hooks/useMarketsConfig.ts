@@ -9,7 +9,6 @@ export const useMarketsConfig = () => {
   const { data, error } = useMarketsRequest();
   // console.log(`data: `, data);
   const res = useMemo(() => {
-    console.log(`data?.optionContracts: `, data?.optionContracts);
     if (!data?.optionContracts) {
       return null;
     }

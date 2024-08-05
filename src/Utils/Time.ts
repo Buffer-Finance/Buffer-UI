@@ -24,7 +24,6 @@ export const getDistance = (endTimestamp: number): number => {
   // UNIX's epochs are in seconds, JS epochs millisecond, so first convert now's milliseconds to seconds.s
   const currentDate = new Date();
   const now = parseInt(currentDate.getTime().toString().slice(0, -3), 10);
-  console.log(`endTimestamp: `, endTimestamp, now);
   return endTimestamp - now;
 };
 

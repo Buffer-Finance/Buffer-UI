@@ -45,7 +45,6 @@ export const TradeSizeSelector: React.FC<{
   const tradeSize = useAtomValue(tradeSizeAtom);
 
   if (!poolDetails || !readcallData || !switchPool) return <></>;
-  console.log(`1index-registeredOneCT: `, registeredOneCT);
 
   const decimals = poolDetails.decimals;
   const balance = divide(readcallData.balance ?? 0, decimals) as string;
@@ -110,7 +109,6 @@ export const PlatfromFeeError = ({
   tradeSize: string;
   payout: any;
 }) => {
-  console.log('payout', payout);
   if (payout == undefined || payout == null) return null;
   const jackpotValue = useJackpotInfo();
   const denominator = divide(multiply(payout, '2'), 2);
@@ -166,10 +164,6 @@ export const PlatfromFeeErrorOld = ({
   const isError = notEnooghForFee;
   const JackpotChip = null;
   if (notEnooghForFee && notEnoughForTrade) return <></>;
-  console.log(
-    `index-notEnooghForFee && notEnoughForTrade: `,
-    notEnooghForFee && notEnoughForTrade
-  );
   return (
     <RowGapItemsTop
       gap="2px"

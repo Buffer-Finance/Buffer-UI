@@ -30,7 +30,6 @@ export const useOneDayVolume = () => {
               }
             }`,
       });
-      console.log(`response.data: `, response.data);
       return response.data?.data as {
         abVolumePerContracts: {
           items: {
@@ -49,10 +48,6 @@ export const useOneDayVolume = () => {
   const oneDayVolume = useMemo(() => {
     if (!data || !data.abVolumePerContracts) return {};
     const startObject: { [key: string]: string } = {};
-    console.log(
-      `data.abVolumePerContracts.items: `,
-      data.abVolumePerContracts.items
-    );
     return data.abVolumePerContracts.items.reduce((acc, item) => {
       const address = getAddress(item.optionContract.address);
       if (acc[address]) {
@@ -63,7 +58,6 @@ export const useOneDayVolume = () => {
       return acc;
     }, startObject);
   }, [data]);
-  console.log(`oneDayVolume: `, oneDayVolume);
 
   return { oneDayVolume };
 };

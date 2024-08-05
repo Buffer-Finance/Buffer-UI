@@ -300,7 +300,6 @@ const Buy: React.FC<{
 
   const selectedPrice = useAtomValue(selectedPriceAtom);
   const isPaused = activeMarket?.isPaused;
-  console.log(`BuyButtonAPI-isPaused: `, isPaused);
 
   // const { data: maxTrades } = useMaxTrade({
   //   activeMarket,

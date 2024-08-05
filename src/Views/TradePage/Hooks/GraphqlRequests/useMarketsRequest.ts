@@ -10,7 +10,6 @@ export const useMarketsRequest = () => {
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
-  console.log(`bothVersionMrkets: `, bothVersionMrkets);
   return {
     data: {
       optionContracts: bothVersionMrkets?.optionContracts.filter(
@@ -43,7 +42,6 @@ export const useAllV2_5MarketsRequest = () => {
 
 export const useV2Markets = () => {
   const { data: bothVersionMrkets, error, mutate } = useBothVersionsMarkets();
-  console.log(`bothVersionMrkets: `, bothVersionMrkets);
   const { activeChain } = useActiveChain();
   const configData = getConfig(activeChain.id);
   return {

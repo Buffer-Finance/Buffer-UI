@@ -31,7 +31,6 @@ export const useSpread = () => {
       if (status !== 200) {
         throw new Error('Could not fetch spread');
       }
-      console.log(`data: `, data);
       return data;
     } catch (e) {
       // toastify({

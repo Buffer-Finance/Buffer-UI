@@ -71,7 +71,6 @@ export const TradeSize: React.FC<{
   if (activeMarket === undefined || readCallData === undefined) return <></>;
   const iv = ivs?.[activeMarket.tv_id];
   const token = activeMarket.poolInfo.token;
-  console.log(`index-token: `, token, readCallData);
   const decimals = activeMarket.poolInfo.decimals;
   const balance =
     divide(readCallData.balances[token], decimals) ?? ('0' as string);
@@ -97,9 +96,7 @@ export const TradeSize: React.FC<{
       selectedStrike[activeMarket.tv_id].marketHash +
       '-' +
       getAddress(activeMarket.address);
-    console.log(`index-marketKey: `, marketKey);
     const imobj = settlementFees[marketKey];
-    console.log(`index-imobj: `, imobj);
     settlementFee = imobj?.[keySrring] ?? settlementFees['Base'];
     probability = BlackScholes(
       true,
@@ -120,15 +117,12 @@ export const TradeSize: React.FC<{
     }
   }
   // selectedStrike
-  console.log(`index-selectedStrike: `, settlementFee, probability);
   let payout = '90';
   if (settlementFee && probability) {
     let totalFee = probability + (settlementFee / 1e4) * probability;
-    console.log(`index-totalFee: `, totalFee);
     let roi = getROI(totalFee);
     payout = roi.substring(0, roi.length - 1);
   }
-  console.log(`index-payout: `, payout);
   if (lt(maxTradeSize, '0')) maxTradeSize = '0';
   return (
     <TradeSizeSelectorBackground className="sm:!mt-[0px]">

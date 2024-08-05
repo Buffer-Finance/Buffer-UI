@@ -99,7 +99,6 @@ export const useLimitedStrikeArrays = () => {
         0,
         iv / 1e4
       );
-      console.log(`settlementFeeAbove: `, settlementFeeAbove);
       let totalFeeAbove: number | null =
         aboveProbability + (settlementFeeAbove / 1e4) * aboveProbability;
 
@@ -188,7 +187,6 @@ export const useLimitedStrikeArrays = () => {
       });
       j++;
     }
-    console.log(`increasingPriceArray: `, increasingPriceArray);
     if (strikePrices[activeMarket.tv_id] === undefined) {
       strikePrices[activeMarket.tv_id] = {
         decreasingPriceArray: [],

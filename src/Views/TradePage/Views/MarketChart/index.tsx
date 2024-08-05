@@ -115,7 +115,6 @@ const MarketChart: React.FC<any> = ({}) => {
   const { data } = usePlatformEvent();
 
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
-  console.log(`index-v3AppConfig: `, v3AppConfig);
   if (!v3AppConfig?.length || !marketPrefix)
     return (
       <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />

@@ -40,9 +40,7 @@ const SidebySideCharts = ({
 
 const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   const isTableExpanded = useAtomValue(isTableShownAtomAB);
-  console.log(`index-isTableExpanded: `, isTableExpanded);
   const v3AppConfig = useAtomValue(aboveBelowMarketsAtom);
-  console.log(`index-v3AppConfig: `, v3AppConfig);
   const chartTimes = useAtomValue(chartNumberAtom);
   const activeMarket = useAtomValue(selectedPoolActiveMarketAtom);
   const [dragging, setDragging] = useState(false);
@@ -116,8 +114,6 @@ const MarketChart: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
   });
 
   const marketPrefix = useMemo(() => activeMarket?.tv_id + ':', [activeMarket]);
-  console.log(`index-marketPrefix: `, marketPrefix);
-  console.log(`index-v3AppConfig: `, v3AppConfig);
   if (!v3AppConfig?.length || !marketPrefix)
     return (
       <Skeleton className="flex w-full !h-full lc !transform-none !my-3" />
