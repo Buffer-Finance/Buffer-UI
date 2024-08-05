@@ -44,7 +44,7 @@ import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
 import { useRecentWinners } from '@Hooks/useRecentWinners';
-import { useAccount } from 'wagmi';
+import { useAccount, useGasPrice } from 'wagmi';
 import LeaderBoardOutlet from '@Views/V2-Leaderboard';
 import AllTime from '@Views/V2-Leaderboard/Components/AllTime';
 import Leagues from '@Views/V2-Leaderboard/Leagues';
@@ -365,6 +365,7 @@ const contents = {
     </a>
   ),
 };
+const MAX_GAS_PRICE = 35000000n;
 function App() {
   useAutoConnect();
   // useRecentWinners();
@@ -374,7 +375,6 @@ function App() {
 
   const graphStatus = useGraphStatus();
   const location = useLocation();
-  console.log(`App-location: `, location);
   const isMobile = useMedia('(max-width:1200px)');
   // return ;
   const filteredContent = Object.keys(contents).filter((key: any) => {
@@ -386,6 +386,10 @@ function App() {
   if (filteredContent.length) {
     bannerCotent = contents[filteredContent[0]];
   }
+  const { data: currentGasPrice } = useGasPrice();
+  console.log(`App-currentGasPrice: `, currentGasPrice);
+  // const currentGasPrice = 350000000n;
+  const isGasPriceHigh = currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
 
   return (
     <>
@@ -405,6 +409,22 @@ function App() {
               closeWarning={() => {}}
               shouldAllowClose={false}
               state={graphStatus.error}
+              className="disclaimer   !text-1 !text-f16 !p-2 !text-semibold hover:!brightness-100"
+            />
+          )}
+          {isGasPriceHigh && (
+            <Warning
+              body={
+                <div className="text-center !text-1">
+                  <WarningOutlined className="text-[#f3cf34]" /> Trade execution
+                  might be slightly impacted by elevated gas prices,temporarily
+                  which could result in a longer than anticipated time to open
+                  and execute trades.
+                </div>
+              }
+              closeWarning={() => {}}
+              shouldAllowClose={false}
+              state={true}
               className="disclaimer   !text-1 !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
           )}
