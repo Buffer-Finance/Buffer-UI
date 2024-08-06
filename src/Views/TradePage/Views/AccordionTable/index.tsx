@@ -61,24 +61,6 @@ const AccordionTable: React.FC<any> = ({}) => {
     });
   };
 
-  useEffect(() => {
-    const priceQueries: { pair: string; timestamp: number; queueId: number }[] =
-      [];
-    activeTrades.forEach((trade) => {
-      if (trade.state == 'QUEUED') {
-        if (trade.market) {
-          if (!(trade.queue_id in priceCache))
-            priceQueries.push({
-              pair: trade.market.tv_id,
-              timestamp: trade.open_timestamp,
-              queueId: trade.queue_id,
-            });
-        }
-      }
-    });
-    getAugmentedData(priceQueries);
-  }, [activeTrades.length]);
-
   return (
     <div className="flex flex-col    ">
       <div className="w-full bg-[#282B39] rounded-[2px] flex items-center  justify-between p-3 ">

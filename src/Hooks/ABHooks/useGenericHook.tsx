@@ -73,13 +73,13 @@ const useGenericHooks = () => {
         const poolInfo = getPoolInfo(currTrade.trade.pool.pool);
 
         setTimeout(() => {
-          getExpireNotification(
-            { ...currTrade.trade },
-            toastify,
-            openShareModal,
-            poolInfo,
-            showSharePopup
-          );
+          // getExpireNotification(
+          //   { ...currTrade.trade },
+          //   toastify,
+          //   openShareModal,
+          //   poolInfo,
+          //   showSharePopup
+          // );
         }, delay * 1000);
         delete tradeCache.current[tradeIdentifier];
       }
