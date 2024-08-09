@@ -28,7 +28,12 @@ export const useCompetitionRewardsAlloted = () => {
       }
       try {
         const { data, status } = await axios.get(
-          baseLeaderboardURLString + `rewards/${address}`
+          baseLeaderboardURLString + `rewards/${address}`,
+          {
+            params: {
+              first: 1000,
+            },
+          }
         );
 
         if (status !== 200) {
