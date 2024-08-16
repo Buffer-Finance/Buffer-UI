@@ -5,6 +5,36 @@ export const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE = {
   silver: 217,
   bronze: 77,
 };
+export const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW = {
+  2849: {
+    diamond: 1110,
+    platinum: 780,
+    gold: 620,
+    silver: 440,
+    bronze: 177,
+  },
+  2850: {
+    diamond: 1110,
+    platinum: 780,
+    gold: 620,
+    silver: 440,
+    bronze: 177,
+  },
+  2851: {
+    diamond: 1110,
+    platinum: 780,
+    gold: 620,
+    silver: 440,
+    bronze: 177,
+  },
+  2852: {
+    diamond: 1110,
+    platinum: 780,
+    gold: 620,
+    silver: 440,
+    bronze: 177,
+  },
+};
 
 export const EligibilityCriteria = {
   diamond: 10000,

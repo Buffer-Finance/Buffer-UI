@@ -5,7 +5,10 @@ import { divide } from '@Utils/NumString/stringArithmatics';
 import { Col } from '@Views/Common/ConfirmationModal';
 import { Display } from '@Views/Common/Tooltips/Display';
 import { IconToolTip } from '@Views/TradePage/Components/IconToolTip';
-import { getWeekId } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
+import {
+  getLeaderboardWeekId,
+  getWeekId,
+} from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/getWeekId';
 import { useWinnersByPnlWeekly } from '@Views/V2-Leaderboard/Leagues/WinnersByPnl/useWinnersByPnlWeekly';
 import { leagueType } from '@Views/V2-Leaderboard/Leagues/atom';
 import { Skeleton } from '@mui/material';
@@ -13,9 +16,15 @@ import axios from 'axios';
 import useSWR from 'swr';
 import { descClass, headClass } from '../../Incentivised';
 import { ContestFilterDD } from '../ContestFilterDD';
-import { WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE } from '@Views/V2-Leaderboard/config';
+import {
+  WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE,
+  WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW,
+} from '@Views/V2-Leaderboard/config';
 import { useDailyLeaderboardData } from '@Views/V2-Leaderboard/Incentivised/useDailyLeaderBoardData';
 import { useMemo } from 'react';
+import { useWeekOfTournament } from '@Views/V2-Leaderboard/Hooks/useWeekOfTournament';
+import { useWeekOffset } from '@Views/V2-Leaderboard/Hooks/useWeekoffset';
+import { weeklyTournamentConfig } from '@Views/V2-Leaderboard/Weekly/config';
 
 function capitalizeFirstLetter(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -126,20 +135,21 @@ export const BarData: React.FC<{
 };
 
 const RewardPool: React.FC<{ league: leagueType }> = ({ league }) => {
-  const WEEKLY_LOSS_REWARDS_ALLOCATION_BY_LEAGUE = {
-    diamond: 800,
-    platinum: 500,
-    silver: 400,
-    gold: 200,
-    bronze: 100,
-  };
-  return (
-    <Display
-      data={WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE[league]}
-      unit="ARB"
-      precision={0}
-    />
-  );
+  const configValue = weeklyTournamentConfig['42161'];
+
+  const { week } = useWeekOfTournament({
+    startTimestamp: configValue.startTimestamp,
+  });
+  const { offset } = useWeekOffset();
+  const localWeekId = getLeaderboardWeekId(Number(offset ?? '0'));
+  let allocation = WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE;
+
+  if (localWeekId in WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW) {
+    allocation = WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW[localWeekId];
+  }
+  // if()
+
+  return <Display data={allocation[league]} unit="ARB" precision={0} />;
 };
 
 const RestCountdown: React.FC<{ resetTimestamp: number }> = ({
