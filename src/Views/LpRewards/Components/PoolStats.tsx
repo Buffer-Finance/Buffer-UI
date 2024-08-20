@@ -87,7 +87,7 @@ export const PoolStats: React.FC<{
         }
       />
       <DataColumn
-        title="90 Days Boost APR"
+        title="90 Days APR Boost"
         value={
           apr !== undefined ? (
             <span className={defaultDataStyle}>
