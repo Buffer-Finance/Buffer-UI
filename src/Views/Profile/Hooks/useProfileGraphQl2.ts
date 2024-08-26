@@ -44,8 +44,8 @@ export const useProfileGraphQl2 = (product: Products) => {
     const query = `
     {
       ${basequery}
-    }
-    `;
+      }
+      `;
     const response = await axios.post(graphUrl, {
       query,
     });
@@ -88,6 +88,7 @@ export const useProfileGraphQl2 = (product: Products) => {
         volume: '0',
       },
     };
+    console.log(`data: `, data);
     const response = data.reduce((acc, curr) => {
       const {
         token,
@@ -100,7 +101,7 @@ export const useProfileGraphQl2 = (product: Products) => {
         tradesWon,
         optionContract: { asset },
       } = curr;
-      acc.totalNonActiveTrades += tradeCount - tradesOpen;
+      acc.totalNonActiveTrades += +tradeCount;
       console.log(
         `acc.totalNonActiveTrades: `,
         acc.totalNonActiveTrades,

@@ -60,9 +60,11 @@ export const UserDataV2 = () => {
 
   const winrate = useMemo(() => {
     if (!metrics) return null;
+    if (!metrics.totalNonActiveTrades) return 0;
     console.log(`UserDataV2-metrics.totalTradesWon : `, metrics.totalTradesWon);
     return (metrics.totalTradesWon * 100) / metrics.totalNonActiveTrades || 0;
   }, [metrics]);
+  console.log(`UserDataV2-winrate: `, typeof metrics?.totalNonActiveTrades);
 
   return (
     <div className="flex items-center justify-between flex-wrap sm:items-stretch sm:gap-4 gap-7">
@@ -170,7 +172,7 @@ export const UserDataV2 = () => {
           className={'winner-card'}
           head={'Win Rate'}
           desc={
-            winrate !== null ? (
+            winrate ? (
               <Display
                 data={winrate}
                 unit={'%'}
@@ -180,7 +182,9 @@ export const UserDataV2 = () => {
                 }
               />
             ) : (
-              <div className="text-light-blue">-</div>
+              <div title="Not won any trade yet!" className="text-light-blue">
+                -
+              </div>
             )
           }
           headClass={userDataHeadClass}
