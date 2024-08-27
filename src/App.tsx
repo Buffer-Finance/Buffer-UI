@@ -386,7 +386,7 @@ function App() {
   if (filteredContent.length) {
     bannerCotent = contents[filteredContent[0]];
   }
-  const { data: currentGasPrice } = useGasPrice();
+  const { data: currentGasPrice } = useGasPrice({ chainId: 42161 });
   console.log(`App-currentGasPrice: `, currentGasPrice);
   // const currentGasPrice = 350000000n;
   const isGasPriceHigh = currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
