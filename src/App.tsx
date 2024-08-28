@@ -372,6 +372,7 @@ function App() {
   const [snack, setSnack] = useAtom(snackAtom);
   const [mobileWarningClosed, setWarningCloseOnMobile] =
     useAtom(mobileWarningAtom);
+  const account = useAccount();
 
   const graphStatus = useGraphStatus();
   const location = useLocation();
@@ -390,6 +391,19 @@ function App() {
   console.log(`App-currentGasPrice: `, currentGasPrice);
   // const currentGasPrice = 350000000n;
   const isGasPriceHigh = currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
+  useEffect(() => {
+    if (
+      account?.address &&
+      posthog &&
+      typeof posthog.get_distinct_id == 'function'
+    ) {
+      const uniqueId = posthog.get_distinct_id();
+      console.log(`App-uniqueId: `, uniqueId);
+      posthog.identify(uniqueId, {
+        tag: account?.address,
+      });
+    }
+  }, [account]);
 
   return (
     <>
