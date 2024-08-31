@@ -69,7 +69,7 @@ export const PoolStats: React.FC<{
           )
         }
       />
-      <DataColumn
+      {/* <DataColumn
         title="Current USDC APR"
         value={
           apr !== undefined ? (
@@ -85,7 +85,7 @@ export const PoolStats: React.FC<{
             <Skeleton className="w-[50px] !h-5 lc !transform-none " />
           )
         }
-      />
+      /> */}
       <DataColumn
         title="90 Days APR Boost"
         value={
