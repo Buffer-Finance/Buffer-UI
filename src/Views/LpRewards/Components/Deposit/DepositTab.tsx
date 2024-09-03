@@ -107,8 +107,8 @@ export const DepositTab: React.FC<{
         </ConnectionRequired>
       </div>
       <Text>
-        As a counterparty in trades, you will receive 70% of the trading fees.
-        APR is updated every Wednesday at4:00 pm UTC
+        As a counterparty, you earn 95% of the trading fees, auto-compounded in
+        pool each time when $100 worth of settlement fee is collected.
       </Text>
       <Text>
         * uBLP is NOT principal protected. The value of uBLP may decrease from
