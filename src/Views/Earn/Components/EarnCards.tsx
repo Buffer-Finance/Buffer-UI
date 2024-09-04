@@ -53,7 +53,7 @@ export const getEarnCards = (data: IEarn) => {
       top={
         <div>
           <div className="chip-styles">
-            Deposits to this vault are now closed now.
+            Deposits to this vault are closed now.
             <br /> The new{' '}
             <a
               className="sdfasd"
