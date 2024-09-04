@@ -51,7 +51,19 @@ export const getEarnCards = (data: IEarn) => {
     />,
     <Card
       top={
-        <>
+        <div>
+          <div className="chip-styles">
+            Deposits to this vault are now closed now.
+            <br /> The new{' '}
+            <a
+              className="sdfasd"
+              href="https://app.buffer.finance/#/lp-boost"
+              target="_blank"
+            >
+              USDC-BLP{' '}
+            </a>
+            is open for deposits with a <b>massive 95% fee share</b> for LPs.
+          </div>
           <NumberTooltip
             content={
               <>
@@ -110,7 +122,7 @@ export const getEarnCards = (data: IEarn) => {
             New Vault (Option trading will start in the the first week of
             January.)
           </div> */}
-        </>
+        </div>
       }
       middle={<BLP data={data.earn.blp} unit="uBLP" depositToken="USDC" />}
       bottom={
