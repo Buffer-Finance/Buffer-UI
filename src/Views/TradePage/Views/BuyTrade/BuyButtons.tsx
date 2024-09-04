@@ -1,4 +1,5 @@
 import { useToast } from '@Contexts/Toast';
+import { useGasPriceCheck } from '@Hooks/useGasPrice';
 import { priceAtom } from '@Hooks/usePrice';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import DownIcon from '@SVG/Elements/DownIcon';
@@ -69,6 +70,7 @@ export const BuyButtons = ({
     switchPool?.optionContract
   );
   const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
+  console.log(`BuyButtons-activePool: `, activePool);
 
   const { viewOnlyMode } = useUserAccount();
 
@@ -109,6 +111,10 @@ export const BuyButtons = ({
         View Only Mode
       </BlueBtn>
     );
+  const { isGasPriceHigh } = useGasPriceCheck();
+  console.log(`BuyButtons-isGasPriceHigh: `, isGasPriceHigh);
+
+  console.log(`BuyButtons-isAssetActive: `, isAssetActive);
   return (
     <>
       {/* <ApproveModal
@@ -128,20 +134,6 @@ export const BuyButtons = ({
             <Skeleton className="h4 full-width sr lc mb3" />
           ) : !isAssetActive ? (
             <div className="flex  flex-col justify-center items-end gap-[4px]">
-              {isUSDCSelected(activePool) ? (
-                <span className="chip-styles">
-                  Switch to{' '}
-                  <button
-                    onClick={() => {
-                      setActivePool({ activePool: 'USDC' });
-                    }}
-                    className="underline"
-                  >
-                    USDC
-                  </button>{' '}
-                  & trade effortlessly
-                </span>
-              ) : null}
               <BlueBtn
                 className="text-f13 text-1 text-center"
                 isDisabled={true}
@@ -164,6 +156,11 @@ export const BuyButtons = ({
             </BlueBtn>
           ) : (
             <>
+              {isGasPriceHigh ? (
+                <div className="chip-styles-danger w-full text-[#eaeaea] mb-3">
+                  Trade settlements delayed due to gas spike{' '}
+                </div>
+              ) : null}
               <div className="flex gap-2 items-center">
                 <BufferButton
                   onClick={() => buyTrade(true)}

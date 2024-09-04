@@ -224,6 +224,28 @@ body {
     width:100%;
     text-align:center;
 }
+.chip-styles-danger{
+  background: #3a2727;
+    border: 1px solid #b42828;
+    padding: 4px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    font-size: 12px;
+    width:100%;
+    text-align:center;
+}
+.chip-styles-info{
+  background: #273a38;
+    border: 1px solid #53d0d0;
+    padding: 4px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    /* font-size: 12px; */
+    width:fit-content;
+    /* text-align:center; */
+}
 .my-node-exit-active {
   opacity: 0;
   transform: translateX(-100%);
@@ -2552,9 +2574,7 @@ html .tooltip {
   font-family: Relative Pro;
   font-weight: 500;
   font-size: 1.2rem;
-  background-color: rgb(21, 21, 32);
-  box-shadow: rgba(30, 30, 30, 0.25) 0px 14px 28px,
-    rgba(30, 30, 30, 0.22) 0px 10px 10px;
+  background: #222632;
   color: var(--text-1);
   padding: 0.4rem 1.2rem;
   line-height: 20px;
@@ -2564,9 +2584,7 @@ html .tooltip {
 }
 
 html .arrow:before {
-  background-color: rgb(21, 21, 32);
-  box-shadow: rgba(30, 30, 30, 0.25) 0px 14px 28px,
-    rgba(30, 30, 30, 0.22) 0px 10px 10px;
+  background-color:#222632;
 }
 
 .pg-tab {

@@ -46,6 +46,7 @@ import {
 import { useNavigateToProfile } from './HistoryTable';
 import { Visualized } from './Visualized';
 import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
+import { GasCheckWrapperForTradeSettlement } from '@Hooks/useGasPrice';
 
 export const OngoingTradesTable: React.FC<{
   trades: TradeType[] | undefined;
@@ -262,20 +263,22 @@ export const OngoingTradesTable: React.FC<{
           />
         );
       case TableColumn.Probability:
-        return (
-          queuedTradeFallBack(trade) || (
-            <div>
-              <Pnl
-                configData={trade.market}
-                trade={trade}
-                poolInfo={poolInfo}
-                lockedAmmount={lockedAmmount}
-              />
-              <div className="flex items-center gap-2">
-                <Probability trade={trade} marketPrice={marketPrice} />{' '}
-              </div>
+        return queuedTradeFallBack(trade, false, true) ? (
+          <GasCheckWrapperForTradeSettlement>
+            Settling the order..
+          </GasCheckWrapperForTradeSettlement>
+        ) : (
+          <div>
+            <Pnl
+              configData={trade.market}
+              trade={trade}
+              poolInfo={poolInfo}
+              lockedAmmount={lockedAmmount}
+            />
+            <div className="flex items-center gap-2">
+              <Probability trade={trade} marketPrice={marketPrice} />{' '}
             </div>
-          )
+          </div>
         );
     }
     return 'Unhandled Body';

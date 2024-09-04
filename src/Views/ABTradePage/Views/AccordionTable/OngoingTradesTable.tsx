@@ -14,6 +14,21 @@ import {
   round,
   subtract,
 } from '@Utils/NumString/stringArithmatics';
+
+import { BlackScholes } from '@Utils/Formulas/blackscholes';
+import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
+import { useIV } from '@Views/AboveBelow/Hooks/useIV';
+import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
+import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
+import { JackpotChip } from '@Views/Jackpot/JackpotChip';
+import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
+import { CellContent } from '@Views/Common/BufferTable/CellInfo';
+import {
+  GasCheckWrapperForTradeSettlement,
+  useGasPriceCheck,
+} from '@Hooks/useGasPrice';
+// import { Display } from '@Views/Common/Tooltips/Display';
+
 import { Variables } from '@Utils/Time';
 import { getSlicedUserAddress } from '@Utils/getUserAddress';
 import NumberTooltip from '@Views/Common/Tooltips';
@@ -128,7 +143,6 @@ export const OngoingTradesTable: React.FC<{
     return <TableHeader col={col} headsArr={headNameArray} />;
   };
   const jackpotManager = useJackpotManager();
-
   const BodyFormatter: any = (row: number, col: number) => {
     if (trades === undefined) return <></>;
     const trade = trades?.[row];
@@ -158,7 +172,12 @@ export const OngoingTradesTable: React.FC<{
 
     switch (col) {
       case TableColumn.Payout:
-        if (trade.state === 'QUEUED') return <>-</>;
+        if (trade.state === 'QUEUED')
+          return (
+            <GasCheckWrapperForTradeSettlement>
+              Settling...
+            </GasCheckWrapperForTradeSettlement>
+          );
         return (
           <CellContent
             content={[
@@ -513,16 +532,6 @@ const ProgressLineWrapper = styled.div<{ duration: number; delay: number }>`
 //   if (!probabiliyt) return <div>Calculating..</div>;
 //   return <div> {toFixed(probabiliyt, 2) + '%'}</div>;
 // };
-
-import { BlackScholes } from '@Utils/Formulas/blackscholes';
-import { BetState } from '@Views/AboveBelow/Hooks/useAheadTrades';
-import { useIV } from '@Views/AboveBelow/Hooks/useIV';
-import { useMarketPrice } from '@Views/AboveBelow/Hooks/useMarketPrice';
-import { IGQLHistory } from '@Views/AboveBelow/Hooks/usePastTradeQuery';
-import { JackpotChip } from '@Views/Jackpot/JackpotChip';
-import { getJackpotKey, useJackpotManager } from 'src/atoms/JackpotState';
-import { CellContent } from '@Views/Common/BufferTable/CellInfo';
-// import { Display } from '@Views/Common/Tooltips/Display';
 
 export const Probability: React.FC<{
   trade: TradeType;

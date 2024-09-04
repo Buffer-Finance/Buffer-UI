@@ -44,7 +44,7 @@ import { urlSettings } from './Config/wagmiClient';
 import { activeMarketFromStorageAtom } from './globalStore';
 import { PageLoader } from './PageLoader';
 import { useRecentWinners } from '@Hooks/useRecentWinners';
-import { useAccount, useGasPrice } from 'wagmi';
+import { useAccount } from 'wagmi';
 import LeaderBoardOutlet from '@Views/V2-Leaderboard';
 import AllTime from '@Views/V2-Leaderboard/Components/AllTime';
 import Leagues from '@Views/V2-Leaderboard/Leagues';
@@ -387,10 +387,6 @@ function App() {
   if (filteredContent.length) {
     bannerCotent = contents[filteredContent[0]];
   }
-  const { data: currentGasPrice } = useGasPrice({ chainId: 42161 });
-  console.log(`App-currentGasPrice: `, currentGasPrice);
-  // const currentGasPrice = 350000000n;
-  const isGasPriceHigh = currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
   useEffect(() => {
     if (
       account?.address &&
@@ -426,20 +422,6 @@ function App() {
               className="disclaimer   !text-1 !text-f16 !p-2 !text-semibold hover:!brightness-100"
             />
           )}
-          {isGasPriceHigh && (
-            <Warning
-              body={
-                <div className="text-center !text-1">
-                  <WarningOutlined className="text-[#f3cf34]" /> Elevated gas
-                  prices may delay trade opening and closing times temporarily.
-                </div>
-              }
-              closeWarning={() => {}}
-              shouldAllowClose={false}
-              state={true}
-              className="disclaimer   !text-1 !text-f16 !p-2 !text-semibold hover:!brightness-100"
-            />
-          )}
           <Navbar />
           <AppRoutes />
           <Snackbar
@@ -458,23 +440,21 @@ function App() {
             </Alert>
           </Snackbar>
 
-          {!isGasPriceHigh && (
-            <Warning
-              body={
-                <div className="w-fit flex items-center m-auto">
-                  <span className="text-f14 font-extrabold  text-[white] leading-[21px] sm:text-[11px] sm:leading-[12px]">
-                    {bannerCotent}
-                  </span>
-                </div>
-              }
-              closeWarning={() => {
-                setWarningCloseOnMobile(true);
-              }}
-              shouldAllowClose={false}
-              state={!mobileWarningClosed}
-              className="disclaimer !bg-[#10D2FF] !text-[#232334]"
-            />
-          )}
+          <Warning
+            body={
+              <div className="w-fit flex items-center m-auto">
+                <span className="text-f14 font-extrabold  text-[white] leading-[21px] sm:text-[11px] sm:leading-[12px]">
+                  {bannerCotent}
+                </span>
+              </div>
+            }
+            closeWarning={() => {
+              setWarningCloseOnMobile(true);
+            }}
+            shouldAllowClose={false}
+            state={!mobileWarningClosed}
+            className="disclaimer !bg-[#10D2FF] !text-[#232334]"
+          />
 
           <TnCModal />
           <SideBar />
