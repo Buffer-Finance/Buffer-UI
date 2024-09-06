@@ -2,7 +2,7 @@ export type poolsType = 'uBLP' | 'aBLP';
 export type transactionTabType = 'all' | 'my';
 // export type depositTabType = 'deposit' | 'withdraw' | 'vest';
 export type depositTabType = 'deposit' | 'withdraw';
-export type graphsType = 'price' | 'tvl' | 'apr' | 'pnl';
+export type graphsType = 'price' | 'tvl' | 'apr';
 export type mobileTabsType = 'deposits' | 'transactions';
 
 export type poolTxn = {

@@ -33,7 +33,7 @@ export const Graphs: React.FC<{
         <PriceChart activeChain={activeChain} activePool={activePool} />
         <TVLChart activeChain={activeChain} activePool={activePool} />
         <></>
-        <ProfitLossChart activeChain={activeChain} activePool={activePool} />
+        {/* <ProfitLossChart activeChain={activeChain} activePool={activePool} /> */}
       </HorizontalTransition>
     </div>
   );
