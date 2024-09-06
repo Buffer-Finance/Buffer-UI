@@ -28,11 +28,11 @@ export const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW = {
     bronze: 177,
   },
   2852: {
-    diamond: 1110,
-    platinum: 780,
-    gold: 620,
-    silver: 440,
-    bronze: 177,
+    diamond: 635,
+    platinum: 450,
+    gold: 355,
+    silver: 250,
+    bronze: 100,
   },
 };
 
