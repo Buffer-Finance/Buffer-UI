@@ -62,7 +62,7 @@ export const OverAllData: React.FC<{
                 <span className="text-[#FFFFFF]">
                   {selectedSeason < 9
                     ? 1534
-                    : selectedSeason == 12
+                    : selectedSeason == 13
                     ? 1800
                     : 3010}
                 </span>
