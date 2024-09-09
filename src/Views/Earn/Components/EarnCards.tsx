@@ -62,7 +62,7 @@ export const getEarnCards = (data: IEarn) => {
             >
               USDC-BLP{' '}
             </a>
-            is open for deposits with a <b>massive 95% fee share</b> for LPs.
+            is open for deposits with a <b>massive 95% fee</b> share for LPs.
           </div>
           <NumberTooltip
             content={
