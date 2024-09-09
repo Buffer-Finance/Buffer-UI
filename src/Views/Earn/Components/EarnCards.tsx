@@ -143,6 +143,11 @@ export const getEarnCards = (data: IEarn) => {
     <Card
       top={
         <>
+          <div className="chip-styles">
+            This ARB-aBLP is open for deposits with a <b>massive 95% fee</b>{' '}
+            share for LPs.
+          </div>
+
           <NumberTooltip
             content={
               <>
@@ -616,40 +621,58 @@ const BLP = ({
       <Divider />
       <TableAligner
         keysName={[
-          'APR',
+          isBLPCard ? 'Pool Share' : 'APR',
           isBLPCard ? 'Rewards' : 'Multiplier Points APR',
           isBLPCard && 'Lockup Period',
           isBLPCard && 'Withdrawable Amount',
         ]}
         values={[
-          <div className={`${wrapperClasses}`}>
-            <Display
-              className="!justify-end"
-              data={data.apr.value}
-              placement="bottom"
-              unit="%"
-              content={
-                <span>
-                  <TableAligner
-                    keysName={data.apr.tooltip.map((s) => s.key)}
-                    keyStyle={tooltipKeyClasses}
-                    valueStyle={tooltipValueClasses}
-                    values={data.apr.tooltip.map((s) => (
-                      <Display
-                        className="!justify-end"
-                        data={s.value}
-                        unit="%"
-                      />
-                    ))}
-                  ></TableAligner>
-                  <div className="text-left mt-3 font-normal">
-                    {data.apr.description}
-                  </div>
-                </span>
-              }
-              // unit={unit === "BLP" && unit}
-            />{' '}
-          </div>,
+          isBLPCard ? (
+            <div className={`${wrapperClasses}`}>
+              <Display
+                className="!justify-end"
+                data={95}
+                placement="bottom"
+                unit="%"
+                content={
+                  <span>
+                    95% of fee collected will be compounded and distributed to
+                    Liquidity Providers.
+                  </span>
+                }
+                // unit={unit === "BLP" && unit}
+              />{' '}
+            </div>
+          ) : (
+            <div className={`${wrapperClasses}`}>
+              <Display
+                className="!justify-end"
+                data={data.apr.value}
+                placement="bottom"
+                unit="%"
+                content={
+                  <span>
+                    <TableAligner
+                      keysName={data.apr.tooltip.map((s) => s.key)}
+                      keyStyle={tooltipKeyClasses}
+                      valueStyle={tooltipValueClasses}
+                      values={data.apr.tooltip.map((s) => (
+                        <Display
+                          className="!justify-end"
+                          data={s.value}
+                          unit="%"
+                        />
+                      ))}
+                    ></TableAligner>
+                    <div className="text-left mt-3 font-normal">
+                      {data.apr.description}
+                    </div>
+                  </span>
+                }
+                // unit={unit === "BLP" && unit}
+              />{' '}
+            </div>
+          ),
           isBLPCard ? (
             <div className={`${wrapperClasses}`}>
               <Display
