@@ -552,7 +552,20 @@ export const marketsForChart = {
     pythGroup: 'Crypto',
     expo: 8,
   },
-
+  MATICUSD: {
+    category: 'Crypto',
+    tv_id: 'MATICUSD',
+    pair: 'MATIC-USD',
+    price_precision: 100,
+    token0: 'MATIC',
+    token1: 'USD',
+    full_name: 'Matic',
+    img: 'https://cdn.buffer.finance/Buffer-Website-Data/main/Assets/matic.svg',
+    pythId:
+      '0x5de33a9112c2b700b8d30b8a3402c103578ccfa2765696471cc672bd5cf6ac52',
+    pythGroup: 'Crypto',
+    expo: 8,
+  },
   OPUSD: {
     category: 'Crypto',
     tv_id: 'OPUSD',
