@@ -147,11 +147,6 @@ export const getPrice = async () => {
         .join('&')
   );
   const marketPrice = {};
-  marketPrice['BTCUSD'].take.mind;
-  console.log(
-    `marketPrice['BTCUSD'].take.mind: `,
-    marketPrice['BTCUSD'].take.mind
-  );
   price.data.forEach((e) => {
     marketPrice[pythIds[e.id]] = [
       {
