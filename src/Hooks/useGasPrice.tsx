@@ -3,7 +3,8 @@ import { ReactNode } from 'react';
 import { useGasPrice } from 'wagmi';
 
 // const MAX_GAS_PRICE = 300000n;
-const MAX_GAS_PRICE = 35000000n;
+// const MAX_GAS_PRICE = 35000000n;
+const MAX_GAS_PRICE = 56000000n;
 
 export function useGasPriceCheck() {
   const { data: currentGasPrice } = useGasPrice({ chainId: 42161 });
