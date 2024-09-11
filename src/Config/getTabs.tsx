@@ -301,7 +301,7 @@ export const getTabs = (
   if (import.meta.env.VITE_ENV.toUpperCase() === 'MAINNET') {
     return [
       {
-        to: `/ab/` + market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -436,7 +436,7 @@ export const getTabs = (
   } else
     return [
       {
-        to: `/ab/` + market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -590,7 +590,7 @@ export const getMobileTabs = (
   if (import.meta.env.VITE_ENV === 'MAINNET') {
     return [
       {
-        to: `/ab/` + market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
@@ -700,7 +700,7 @@ export const getMobileTabs = (
   } else
     return [
       {
-        to: `/ab/` + market,
+        to: `/binary/` + market,
         name: 'Trade',
         subTabs: [],
         isExternalLink: false,
