@@ -34,6 +34,13 @@ export const WEEKLY_WIN_REWARDS_ALLOCATION_BY_LEAGUE_NEW = {
     silver: 250,
     bronze: 100,
   },
+  2853: {
+    diamond: 0,
+    platinum: 0,
+    gold: 0,
+    silver: 0,
+    bronze: 0,
+  },
 };
 
 export const EligibilityCriteria = {

@@ -70,8 +70,8 @@ export const MobileLeaderboardDropdwon = () => {
 const OnGoingChip = () => {
   return (
     <CSChip
-      text="Ongoing"
-      className="text-[#2BD67B] bg-[#2bd67b26] border-[#00C4FF]  box-border"
+      text="Ended"
+      className="text-[#d62b2b] bg-[#d62b2b26] border-[#00C4FF]  box-border"
     />
   );
 };
