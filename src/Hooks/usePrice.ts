@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from 'react';
 import { Market2Prices } from 'src/Types/Market';
 import { reconnectingSocket } from './wsclient';
 import { useActiveMarket } from '@Views/TradePage/Hooks/useActiveMarket';
+import * as Sentry from '@sentry/react';
+
 type WSUPdate = {
   type: 'price_update';
   price_feed: {
@@ -90,6 +92,8 @@ export const usePriceRetriable = () => {
         }
       } else {
         console.log('error case');
+        // Capture error in Sentry
+        Sentry.captureException(new Error('WS Misbehaved'));
       }
     }
     client.on(handleMessage);
