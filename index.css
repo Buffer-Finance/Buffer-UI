@@ -24,6 +24,63 @@ body {
   overflow: hidden;
 }
 
+
+.shake {
+  animation-name: ios-shake;
+	animation-duration: 1s;
+	animation-direction: alternate;
+	animation-iteration-count: infinite;
+	animation-timing-function: ease-in-out;
+	will-change: transform;
+	backface-visibility: hidden;
+}
+.shake .circle-image{
+  animation:grow-rotate-fast 1s alternate;
+}
+
+@keyframes ios-shake {
+  10% {
+		transform: translate(1px, 1px) rotate3d(0, 0, 1, 2deg);
+	}
+	20% {
+		transform: translate(0px, 0px) rotate3d(0, 0, 1, -2deg);
+	}
+	30% {
+		transform: translate(-1px, -1px) rotate3d(0, 0, 1, 2deg);
+	}
+	40% {
+		transform: translate(0px, 0px) rotate3d(0, 0, 1, -2deg);
+	}
+	50% {
+		transform: translate(1px, 1px) rotate3d(0, 0, 1, 2deg);
+	}
+	60% {
+		transform: translate(1px, 0px) rotate3d(0, 0, 1, -2deg);
+	}
+	70% {
+		transform: translate(0px, 0px) rotate3d(0, 0, 1, 2deg);
+	}
+	80% {
+		transform: translate(0px, 1px) rotate3d(0, 0, 1, -2deg);
+	}
+	90% {
+		transform: translate(1px, 1px) rotate3d(0, 0, 1, 2deg);
+	}
+  
+}
+
+@keyframes grow-rotate-fast {
+  40% {
+		transform: rotate(1080deg) scale(0.8);
+    filter: brightness(0.9);
+	}
+
+	90% {
+		transform: rotate(0deg) scale(1.2);
+    filter: drop-shadow(0 0 10px rgba(0, 55, 255, 0.8)) drop-shadow(0 0 20px rgba(0, 128, 255, 0.6)) brightness(1.2);
+	}
+  
+}
 .wrong-selection {
   border: 1px solid red;
   border-radius: 8px;
@@ -152,8 +209,12 @@ body {
 @keyframes shake {
   from {
     transform: translateY(0%);
+    color:rgb(132, 0, 255);
   }
+  
+  
   to {
+    color:#d4d5df;
     transform: translateY(5%);
   }
 }
@@ -222,6 +283,13 @@ body {
     font-weight: 500;
     font-size: 12px;
     width:100%;
+    text-align:center;
+}
+.chip-styles-BFR-counter{
+  background: #3f659b3c;
+    border: 2px solid #3f659b;
+    border-radius: 10px;
+    width:fit-content;
     text-align:center;
 }
 .chip-styles-danger{

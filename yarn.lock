@@ -17823,6 +17823,11 @@ react-secure-storage@^1.2.2:
     crypto-js "^4.1.1"
     murmurhash-js "^1.0.0"
 
+react-slot-counter@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-slot-counter/-/react-slot-counter-3.0.1.tgz#7b2becdbea1f8c83eb754371d1bd65b287ef3648"
+  integrity sha512-+NwzRrZ+zWErP/8nz+0Y/imtOcMDr1A2Gv8CfzXNRW/zXaxNPMpZQdWeJAX/HiSqaeGc+jxKqKscoMN101NYDg==
+
 react-smooth@^4.0.0:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/react-smooth/-/react-smooth-4.0.1.tgz#6200d8699bfe051ae40ba187988323b1449eab1a"

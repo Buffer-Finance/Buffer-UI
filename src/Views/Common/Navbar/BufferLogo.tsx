@@ -6,18 +6,28 @@ export const BufferLogoComponent: React.FC<{
   logoHeight?: number;
   className?: string;
   fontSize?: string;
-  hideText?:boolean;
-}> = ({ logoWidth, logoHeight, className = '', fontSize ,hideText}) => {
+  onClick?: () => void;
+  hideText?: boolean;
+}> = ({
+  logoWidth,
+  logoHeight,
+  className = '',
+  fontSize,
+  hideText,
+  onClick,
+}) => {
   return (
-    <div className={`flex items-center ${className}`}>
+    <div className={`flex items-center ${className}`} onClick={onClick}>
       <BufferLogo width={logoWidth || 26} height={logoHeight || 26} />
-      {!hideText &&<div
-        className={`text-1 ${
-          fontSize ? fontSize : 'text-[18px]'
-        } ml-[4px] font-semibold`}
-      >
-        Buffer
-      </div>}
+      {!hideText && (
+        <div
+          className={`text-1 ${
+            fontSize ? fontSize : 'text-[18px]'
+          } ml-[4px] font-semibold`}
+        >
+          Buffer
+        </div>
+      )}
     </div>
   );
 };

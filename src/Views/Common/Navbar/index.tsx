@@ -18,6 +18,7 @@ import { Tab } from './Tab';
 import { TabsDropdown } from './TabsDropDown';
 import { useOngoingTrades as useOngoingTradesAB } from '@Views/ABTradePage/Hooks/useOngoingTrades';
 import { useAboveBelowMarketsSetter } from '@Views/AboveBelow/Hooks/useAboveBelowMarketsSetter';
+import { BFRCounter } from '../BFRCounter';
 
 interface INavbar {}
 
@@ -124,12 +125,13 @@ export const Navbar: React.FC<INavbar> = () => {
         )}
       </div>
       <div className="flex items-center gap-[3px] whitespace-nowrap">
-        {inIframe() && (
+        {/* {inIframe() && (
           <button
             onClick={openAdmin}
             className="bg-transparent w-[100px] h-[35px]"
           ></button>
-        )}
+        )} */}
+        <BFRCounter />
         <div id="dropdown-box" className="flex gap-4 items-center text-1">
           <AccountDropdown />
         </div>
