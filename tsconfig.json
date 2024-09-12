@@ -12,7 +12,8 @@
       "@Config/*": ["./Config/*"],
       "@ConfigContract": ["./src/Config/Contracts.ts"],
       "@TV/*": ["./src/TradingView/*"],
-      "@Public/*": ["./public/*"]
+      "@Public/*": ["./public/*"],
+      "@/*": ["./src/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,

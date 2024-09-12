@@ -72,6 +72,7 @@ import RewardsPage from '@Views/Rewards';
 import LpRewardsPage from '@Views/LpRewards';
 import MemoExternalLinkSVG from './SVG/ExternalLinkSVG';
 import { LeagueCriteria } from '@Views/V2-Leaderboard/Leagues/LeagueCriteria';
+import { BFRfarmingLeaderboard } from '@Views/BFRfarmingLeaderboard/BFRfarmingLeaderboard';
 
 export const referralCodeAtom = atomWithStorage('referral-code5', '');
 export const snackAtom = atom<{
@@ -180,6 +181,7 @@ const AppRoutes = () => {
             </Suspense>
           }
         />
+        <Route path="/bfr" element={<BFRfarmingLeaderboard />} />
         <Route
           path="/ab/:market"
           element={
