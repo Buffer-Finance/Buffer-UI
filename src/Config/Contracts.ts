@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const ContractsConfig = {
   421614: {
     graph: {
@@ -121,3 +123,6 @@ export const ContractsConfig = {
     },
   },
 };
+export const pdev = axios.create({
+  baseURL: 'https://instant-trading-backend-production-53e0.up.railway.app',
+});

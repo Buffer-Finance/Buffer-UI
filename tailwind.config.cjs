@@ -89,13 +89,14 @@ module.exports = {
 		  'blue-2': '#0788e6',
 		  'light-blue': '#99D5EF',
 		  'buffer-blue': '#A3E3FF',
+
+		  'light-border': '#2A2A3A',
+		  transparent: 'transparent',
+		  ...defaultColors,
 		  green: '#3fb68b',
 		  red: '#ff5353',
 		  blue: 'var(--bg-signature)',
 		  grey: '#353945',
-		  'light-border': '#2A2A3A',
-		  transparent: 'transparent',
-		  ...defaultColors
 	  },
 	  backgroundColor: {
 		  '1': 'var(--bg-1)',
@@ -106,12 +107,12 @@ module.exports = {
 		  primary: 'var(--bg-0)',
 		  'cross-bg': '#303044',
 		  'vertical-gradient': 'var(--bg-vertical-gradient)',
+		  ...defaultColors,
 		  grey: '#353945',
 		  green: '#3fb68b',
 		  red: '#ff5353',
 		  blue: 'var(--bg-signature)',
-		  transparent: 'transparent',
-		  ...defaultColors
+		  transparent: 'transparent'
 	  },
 	  extend: {
 		  keyframes: {
@@ -151,7 +152,8 @@ module.exports = {
 			  '5': '16px',
 			  '6': '24px',
 			  '7': '32px',
-			  '8': '48px'
+			  '8': '48px',
+			  '0': '0px'
 		  },
 		  borderRadius: {
 			  lg: 'var(--radius)',
@@ -215,7 +217,11 @@ module.exports = {
 		  f20: '20px',
 		  f18: '18px',
 		  f22: '22px',
-		  f24: '24px'
+		  f24: '24px',
+		  f25: '25px',
+		  f26: '26px',
+		  f27: '27px',
+		  f28: '28px'
 	  },
 	  spacing: {
 		  '1': '2px',
