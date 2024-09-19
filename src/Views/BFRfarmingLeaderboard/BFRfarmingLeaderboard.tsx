@@ -12,6 +12,8 @@ import { TableAligner } from '@Views/V2-Leaderboard/Components/TableAligner';
 import { TrendingUp, Trophy } from 'lucide-react';
 import useSWR from 'swr';
 import { useEffect, useState } from 'react';
+import { useUserAccount } from '@Hooks/useUserAccount';
+import { getAddress } from 'viem';
 
 const leaderboardData1stpage = [
   {
@@ -25,6 +27,34 @@ const leaderboardData1stpage = [
 
   // Add more data as needed
 ];
+
+export const useUserbfrPoints = ():
+  | null
+  | (typeof leaderboardData1stpage)[0] => {
+  const account = useUserAccount();
+  const { data } = useSWR('userPoints-' + account?.address, async () => {
+    if (!account?.address) return null;
+
+    const res = await pdev.post('/', {
+      query: `{
+        bfrFarmingPoints(id: "${getAddress(account.address)}") {
+            account
+            amount
+            tradeCnt
+            updatedAt
+            volume
+            id
+          
+        }
+      }`,
+    });
+
+    // console.log(`BFRfarmingLeaderboard-res.data: `);
+
+    return res.data.data.bfrFarmingPoints;
+  });
+  return data;
+};
 
 const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
   const {
@@ -81,7 +111,7 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
             >
               <div className="flex justify-between ">
                 <div className="flex items-center gap-3 mb-2">
-                  <AddressGravatar size={31} account={trader.account} />
+                  <AddressGravatar size={35} account={trader.account} />
                   <div className="flex flex-col gap-1 ">
                     <div className="text-f12">
                       {formatAddress(trader.account)}
@@ -196,7 +226,8 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
     </div>
   );
 };
-
+// 6299
+// 6528
 export { BFRfarmingLeaderboard };
 
 const RankFormatter: React.FC<{ index: number; full?: boolean }> = ({
