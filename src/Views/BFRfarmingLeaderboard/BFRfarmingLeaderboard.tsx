@@ -14,6 +14,7 @@ import useSWR from 'swr';
 import { useEffect, useState } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getAddress } from 'viem';
+import { formatNum } from '@Utils/formatNum';
 
 const leaderboardData1stpage = [
   {
@@ -196,7 +197,7 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
                     align="center"
                     className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] "
                   >
-                    {trader.volume / 1e6}
+                    {formatNum(trader.volume / 1e6)}
                   </td>
                   <td
                     align="center"
