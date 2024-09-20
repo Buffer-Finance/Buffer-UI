@@ -124,5 +124,5 @@ export const ContractsConfig = {
   },
 };
 export const pdev = axios.create({
-  baseURL: 'https://instant-trading-backend-production-53e0.up.railway.app',
+  baseURL: 'https://ponder.buffer.finance/',
 });
