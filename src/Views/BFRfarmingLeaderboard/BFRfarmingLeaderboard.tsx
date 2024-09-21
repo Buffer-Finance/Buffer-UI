@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { useUserAccount } from '@Hooks/useUserAccount';
 import { getAddress } from 'viem';
 import { formatNum } from '@Utils/formatNum';
+import { PageLoader } from '@/PageLoader';
 
 const leaderboardData1stpage = [
   {
@@ -58,6 +59,7 @@ export const useUserbfrPoints = ():
 };
 
 const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
+  const account = useUserAccount();
   const {
     data: leaderboardDataPaginated,
 
@@ -86,7 +88,20 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
   });
   const [search, setSearch] = useState('');
 
-  if (!leaderboardDataPaginated) return <div>Loading...</div>;
+  useEffect(() => {
+    if (account.address && leaderboardDataPaginated)
+      setTimeout(() => {
+        const selectedElements = document.getElementById(
+          `${account.address?.toLowerCase()}-lb`
+        );
+        console.log(
+          `BFRfarmingLeaderboard-selectedElements: `,
+          selectedElements
+        );
+        selectedElements?.scrollIntoView({ behavior: 'smooth' });
+      });
+  }, [account, leaderboardDataPaginated]);
+  if (!leaderboardDataPaginated) return <PageLoader />;
   if (error) return <div>Error...</div>;
 
   return (
@@ -102,7 +117,7 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
         </div>
       </div>
       {/* Top 3 Traders */}
-      <div className="flex gap-5 my-6 rounded-md">
+      <div className="flex gap-5 my-6 rounded-md sm:flex-col sm:items-center ">
         {leaderboardDataPaginated
           .slice(0, 3)
           .map((trader: (typeof leaderboardData1stpage)[0]) => (
@@ -115,7 +130,7 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
                   <AddressGravatar size={35} account={trader.account} />
                   <div className="flex flex-col gap-1 ">
                     <div className="text-f12">
-                      {formatAddress(trader.account)}
+                      {formatAddress(trader.account, account?.address)}
                     </div>
                     <RankFormatter full index={trader.rank} />
                   </div>
@@ -143,81 +158,102 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
 
       {/* Leaderboard Table */}
       <div className="overflow-x-auto bg-[#25252fd4]  rounded-lg p-5">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-f20 font-bold text-slate-300">Leaderboard</h2>
+        <div className="flex justify-between items-center mb-4 sm:flex-col">
+          <h2 className="text-f20 font-bold text-slate-300 sm:mb-2">
+            Leaderboard
+          </h2>
           <SearchComponent {...{ search, setSearch }} />
         </div>
-        <table className="w-full border-separate border-spacing-[0px] text-f14">
-          <thead>
-            <tr className="text-left text-gray-400">
-              <th className="p-2" align="center">
-                Rank
-              </th>
-              <th className="p-2" align="center">
-                Trader
-              </th>
-              <th className="p-2" align="center">
-                Volume (USD)
-              </th>
-              <th className="p-2" align="center">
-                No. of trades
-              </th>
-              <th className="p-2" align="center">
-                Reward Points
-              </th>
-            </tr>
-          </thead>
-          <tbody className="text-f14  ">
-            {leaderboardDataPaginated
-              .filter((a: (typeof leaderboardData1stpage)[0]) => {
-                if (!search) return true;
-                return a.account.toLowerCase().includes(search.toLowerCase());
-              })
-              .map((trader: (typeof leaderboardData1stpage)[0]) => (
-                <tr key={trader.id} className="group     ">
-                  <td
-                    align="center"
-                    className={cn(
-                      'px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] ',
-                      trader.rank == 0 && 'rounded-tl-lg'
-                    )}
+        <div className="max-h-[650px] overflow-y-auto scrollbar-heavy">
+          <table className="w-full border-separate border-spacing-[0px] text-f14">
+            <thead className="sticky top-0 bg-[#25252f]">
+              <tr className="text-left text-gray-400">
+                <th className="p-2" align="center">
+                  Rank
+                </th>
+                <th className="p-2" align="center">
+                  Trader
+                </th>
+                <th className="p-2 " align="center">
+                  Volume (USD)
+                </th>
+                <th className="p-2 sm:hidden" align="center">
+                  No. of trades
+                </th>
+                <th className="p-2" align="center">
+                  Reward Points
+                </th>
+              </tr>
+            </thead>
+            <tbody className="text-f14  ">
+              {leaderboardDataPaginated
+                .filter((a: (typeof leaderboardData1stpage)[0]) => {
+                  if (!search) return true;
+                  return a.account.toLowerCase().includes(search.toLowerCase());
+                })
+                .map((trader: (typeof leaderboardData1stpage)[0]) => (
+                  <tr
+                    key={trader.id}
+                    className={cn('group     ')}
+                    id={`${trader.account.toLowerCase()}-lb`}
                   >
-                    <RankFormatter index={trader.rank} />
-                  </td>
-                  <td
-                    align="center"
-                    className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] "
-                  >
-                    <div className="flex items-center w-fit gap-2">
-                      <AddressGravatar account={trader.account} />
-                      {formatAddress(trader.account)}{' '}
-                    </div>
-                  </td>
-                  <td
-                    align="center"
-                    className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] "
-                  >
-                    {formatNum(trader.volume / 1e6)}
-                  </td>
-                  <td
-                    align="center"
-                    className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] "
-                  >
-                    {trader.tradeCnt}
-                  </td>
-                  <td
-                    align="center"
-                    className={cn(
-                      'px-4 py-3  bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] ',
-                      trader.rank == 0 && 'rounded-tr-lg'
-                    )}
-                  >
-                    <RewardPointTable rewards={trader.amount} />
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                    <td
+                      align="center"
+                      className={cn(
+                        'px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] ',
+                        trader.rank == 0 && 'rounded-tl-lg'
+                      )}
+                    >
+                      <RankFormatter index={trader.rank} />
+                    </td>
+                    <td
+                      align="center"
+                      className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] "
+                    >
+                      <div className="flex items-center w-fit gap-2">
+                        {trader.account.toLowerCase() ==
+                        account?.address?.toLocaleLowerCase() ? (
+                          <>
+                            {' '}
+                            <AddressGravatar account={trader.account} />
+                            You(...
+                            {trader.account.slice(trader.account.length - 5)})
+                          </>
+                        ) : (
+                          <>
+                            {' '}
+                            <AddressGravatar account={trader.account} />
+                            {formatAddress(trader.account)}
+                          </>
+                        )}
+                      </div>
+                    </td>
+                    <td
+                      align="center"
+                      className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30]  "
+                    >
+                      {formatNum(trader.volume / 1e6)}
+                    </td>
+                    <td
+                      align="center"
+                      className="px-4 py-3 bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] sm:hidden"
+                    >
+                      {trader.tradeCnt}
+                    </td>
+                    <td
+                      align="center"
+                      className={cn(
+                        'px-4 py-3  bg-2 boredom-bottom group-hover:bg-[#3e3e4f30] ',
+                        trader.rank == 0 && 'rounded-tr-lg'
+                      )}
+                    >
+                      <RewardPointTable rewards={trader.amount} />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
         <div className="w-full text-right bg-2 rounded-b-lg py-3  px-6">
           Total Participants : {leaderboardDataPaginated.length}
         </div>

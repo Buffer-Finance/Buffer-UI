@@ -1,9 +1,14 @@
 import * as React from 'react';
 import { useAccount } from 'wagmi';
 import ReactTimeAgo from 'react-time-ago';
-export const formatAddress = (ads) =>
-  ads.substr(0, 4) + '....' + ads.substr(-4);
-
+export const formatAddress = (ads, userAddress?: string) => {
+  if (userAddress) {
+    if (ads.toLowerCase() == userAddress.toLowerCase()) {
+      return ads.substr(0, 4) + '....' + ads.substr(-4) + '(You)';
+    }
+  }
+  return ads.substr(0, 4) + '....' + ads.substr(-4);
+};
 export const JackpotDecimals = 18;
 export const JackpotToken = 'ARB';
 
