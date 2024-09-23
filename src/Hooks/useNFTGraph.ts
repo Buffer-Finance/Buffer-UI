@@ -36,6 +36,7 @@ export const useNFTGraph = (a?: any) => {
         }`,
       });
       const nfts = response.data.data.nfts.items;
+      console.log(`nfts: `, nfts);
       return { nfts } as {
         nfts: IGraphNFT[];
       };
@@ -69,7 +70,9 @@ export const useHighestTierNFT = (a?: any) => {
   console.log(`highestTierNFT: `, highestTierNFT);
   if (!highestTierNFT) return { highestTierNFT: null };
   return {
-    ...highestTierNFT,
-    tier: tierToLeagueMapping[highestTierNFT.tier] || 'Bronze',
+    highestTierNFT: {
+      ...highestTierNFT,
+      tier: tierToLeagueMapping[highestTierNFT.tier] || 'Bronze',
+    },
   };
 };

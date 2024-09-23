@@ -22,6 +22,7 @@ import {
   useUserbfrPoints,
   useUserbfrPointsWithRank,
 } from '@Views/BFRfarmingLeaderboard/BFRfarmingLeaderboard';
+import { getNftImage } from './getNftImage';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
@@ -33,6 +34,7 @@ export const UserDataV2 = () => {
   const { winnerUserRank: dailyRank } = useLeaderboardQuery();
   const { winnerUserRank: weeklyRank } = useWeeklyLeaderboardQuery();
   const { highestTierNFT } = useHighestTierNFT({ userOnly: false });
+  console.log(`UserDataV2-highestTierNFT: `, highestTierNFT);
   const metrics = useProfileGraphQl2(activeProduct);
   const { activeChain } = useActiveChain();
   const chains: Chain[] = getChains();
@@ -46,6 +48,7 @@ export const UserDataV2 = () => {
     return chain.blockExplorers?.default.url;
   }, [chains, activeChain.id]);
   const bfrPointsData = useUserbfrPointsWithRank();
+  console.log(`UserDataV2-bfrPointsData: `, bfrPointsData);
   console.log(`UserDataV2-bfrPointsData: `, bfrPointsData);
   const mostTradedAsset = useMemo(() => {
     if (!metrics) return null;
@@ -78,12 +81,10 @@ export const UserDataV2 = () => {
       <div className="flex items-center gap-7 sm:gap-5">
         <div className="relative w-[113px] h-[113px]">
           <CircleAroundPicture />
+          {/* {getNftImage(highestTierNFT.nftImage, 'helo')} */}
           {highestTierNFT !== null ? (
             <img
-              src={
-                'https://gateway.pinata.cloud/ipfs/' +
-                highestTierNFT?.nftImage.split('://')[1]
-              }
+              src={getNftImage(highestTierNFT.nftImage)}
               alt=""
               width={100}
               height={100}
@@ -143,31 +144,21 @@ export const UserDataV2 = () => {
           <Col
             className={'winner-card'}
             head={'User Tier'}
-            desc={
-              <ChainSwitchDropdown
-                baseUrl="/profile"
-                classes={{
-                  imgDimentions: 'w-[17px] h-[17px]',
-                  fontSize: 'text-f13',
-                  itemFontSize: 'text-f13',
-                  verticalPadding: 'py-[0px]',
-                }}
-              />
-            }
+            desc={<NFTtier className="justify-center" />}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
           <Col
             className={'winner-card'}
             head={'Points Leaderboard Rank'}
-            desc={bfrPointsData?.rank}
+            desc={bfrPointsData?.rank || 'NA'}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
           <Col
             className={'winner-card'}
             head={'Points'}
-            desc={bfrPointsData?.amount}
+            desc={bfrPointsData?.amount || 'NA'}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
@@ -227,7 +218,7 @@ export const UserDataV2 = () => {
           <Col
             className={'winner-card'}
             head={'NFT Tier'}
-            desc={<NFTtier userOnly={false} className="justify-center" />}
+            desc={<NFTtier className="justify-center" />}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />

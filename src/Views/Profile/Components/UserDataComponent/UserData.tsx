@@ -61,10 +61,7 @@ export const UserData = () => {
           <CircleAroundPicture />
           {highestTierNFT !== null ? (
             <img
-              src={
-                'https://gateway.pinata.cloud/ipfs/' +
-                highestTierNFT?.nftImage.split('://')[1]
-              }
+              src={highestTierNFT?.nftImage}
               alt=""
               width={100}
               height={100}
