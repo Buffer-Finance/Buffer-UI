@@ -3,53 +3,47 @@ import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import { useUserAccount } from './useUserAccount';
 
-export interface IGraphNFT {
+interface IGraphNFT {
   batchId: string;
   nftImage: string;
   owner: string;
-  tier: string;
+  tier: number;
   tokenId: string;
   phaseId: string;
 }
 
-export const useNFTGraph = (userOnly = false) => {
+export const useNFTGraph = (a?: any) => {
   const { address: account } = useUserAccount();
-  const { cache } = useSWRConfig();
-  const { data } = useSWR(`nfts-the-graph-account-${account}`, {
+  const { data } = useSWR(`nfts-the-graph-account-${account}-claimed`, {
     fetcher: async () => {
-      const response = await axios.post(
-        `https://subgraph.satsuma-prod.com/${
-          import.meta.env.VITE_SATSUMA_KEY
-        }/bufferfinance/arbitrum-mainnet/api`,
-        {
-          query: `{ 
-          nfts(orderBy: tokenId, orderDirection: desc,where: {owner: "${account}"}) {
+      const response = await axios.post('https://ponder.buffer.finance/', {
+        query: `{ 
+          nfts(where: {owner:"${account}"  }) {
+          items {
             batchId
+            claimTimestamp
+            hasRevealed
+            id
+            isMigrated
+            ipfs
             nftImage
             owner
+            phaseId
             tier
             tokenId
-            phaseId
           }
+  }
         }`,
-        }
-      );
-      // console.log(response.data, "response");
-      return response.data?.data as {
+      });
+      const nfts = response.data.data.nfts.items;
+      return { nfts } as {
         nfts: IGraphNFT[];
       };
     },
-    refreshInterval: 300,
+    refreshInterval: 1000,
   });
-  // console.log(`data: `, data);
 
-  return {
-    nfts: userOnly
-      ? (cache.get(`nfts-the-graph-account-${account}`)?.nfts as
-          | IGraphNFT[]
-          | undefined)
-      : (data?.nfts as IGraphNFT[]),
-  };
+  return { nfts: data?.nfts as IGraphNFT[] };
 };
 export enum Tier {
   SILVER,
@@ -58,23 +52,24 @@ export enum Tier {
   DIAMOND,
 }
 
-export const useHighestTierNFT = ({
-  userOnly = false,
-}: {
-  userOnly?: boolean;
-}) => {
-  const { nfts } = useNFTGraph(userOnly);
-  const { address: account } = useUserAccount();
+export const tierToLeagueMapping = {
+  1: 'Diamond',
+  2: 'Platinum',
+  3: 'Gold',
+  4: 'Silver',
+};
+
+export const useHighestTierNFT = (a?: any) => {
+  const { nfts } = useNFTGraph();
 
   const highestTierNFT = useMemo(() => {
-    if (!nfts || nfts.length === 0) return null;
-    const filteredNFTS = nfts.filter((nft) => nft.tier.length > 0);
-    return filteredNFTS.reduce((prev, curr) => {
-      if (Tier[prev.tier.toUpperCase()] < Tier[curr.tier.toUpperCase()])
-        return curr;
-      return prev;
-    }, filteredNFTS[0]);
-  }, [nfts, account]);
-  // console.log(highestTierNFT, "highestTierNFT");
-  return { highestTierNFT };
+    if (!nfts) return null;
+    return nfts.sort((a, b) => a.tier - b.tier)?.[0];
+  }, [nfts]);
+  console.log(`highestTierNFT: `, highestTierNFT);
+  if (!highestTierNFT) return { highestTierNFT: null };
+  return {
+    ...highestTierNFT,
+    tier: tierToLeagueMapping[highestTierNFT.tier] || 'Bronze',
+  };
 };

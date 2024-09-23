@@ -17,7 +17,7 @@ import { getAddress } from 'viem';
 import { formatNum } from '@Utils/formatNum';
 import { PageLoader } from '@/PageLoader';
 
-const leaderboardData1stpage = [
+const demoPointObj = [
   {
     id: '0x0x52bE06E343Dbb35077BfD41C146FfA8156667',
     account: '0x0x52bE86E343Db35077BfD17A41C146FfA8156688',
@@ -30,9 +30,7 @@ const leaderboardData1stpage = [
   // Add more data as needed
 ];
 
-export const useUserbfrPoints = ():
-  | null
-  | (typeof leaderboardData1stpage)[0] => {
+export const useUserbfrPoints = (): null | (typeof demoPointObj)[0] => {
   const account = useUserAccount();
   const { data } = useSWR('userPoints-' + account?.address, async () => {
     if (!account?.address) return null;
@@ -54,6 +52,43 @@ export const useUserbfrPoints = ():
     // console.log(`BFRfarmingLeaderboard-res.data: `);
 
     return res.data.data.bfrFarmingPoints;
+  });
+  return data;
+};
+export const useUserbfrPointsWithRank = (): null | (typeof demoPointObj)[0] => {
+  const account = useUserAccount();
+  const { data } = useSWR('userPoints-wrank' + account?.address, async () => {
+    if (!account?.address) return null;
+
+    const res = await pdev.post('/', {
+      query: `{
+          bfrFarmingPointss(orderBy: "amount", orderDirection: "desc") {
+            items {
+              account
+              amount
+              tradeCnt
+              updatedAt
+              volume
+              id
+            }
+          }
+        }`,
+    });
+
+    // console.log(`BFRfarmingLeaderboard-res.data: `);
+    const withRank = res.data.data.bfrFarmingPointss.items.map(
+      (item: any, index: number) => ({ ...item, rank: index })
+    );
+    console.log(`BFRfarmingLeaderboard-withRank: `, withRank);
+
+    // console.log(`BFRfarmingLeaderboard-res.data: `);
+
+    return (
+      withRank.find(
+        (point: (typeof demoPointObj)[0]) =>
+          point.account.toLowerCase() == account.address?.toLowerCase()
+      ) || null
+    );
   });
   return data;
 };
@@ -120,7 +155,7 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
       <div className="flex gap-5 my-6 rounded-md sm:flex-col sm:items-center ">
         {leaderboardDataPaginated
           .slice(0, 3)
-          .map((trader: (typeof leaderboardData1stpage)[0]) => (
+          .map((trader: (typeof demoPointObj)[0]) => (
             <div
               key={trader.id}
               className=" bg-[#25252fd4] p-4 rounded-lg  flex flex-col gap-2 w-[250px]"
@@ -187,11 +222,11 @@ const BFRfarmingLeaderboard: React.FC<any> = ({}) => {
             </thead>
             <tbody className="text-f14  ">
               {leaderboardDataPaginated
-                .filter((a: (typeof leaderboardData1stpage)[0]) => {
+                .filter((a: (typeof demoPointObj)[0]) => {
                   if (!search) return true;
                   return a.account.toLowerCase().includes(search.toLowerCase());
                 })
-                .map((trader: (typeof leaderboardData1stpage)[0]) => (
+                .map((trader: (typeof demoPointObj)[0]) => (
                   <tr
                     key={trader.id}
                     className={cn('group     ')}

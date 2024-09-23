@@ -18,6 +18,10 @@ import { useNavigate } from 'react-router-dom';
 import { getChains } from 'src/Config/wagmiClient';
 import { Chain } from 'wagmi';
 import { productAtom } from '../ProfileCardsComponent/ProfileCardsV2';
+import {
+  useUserbfrPoints,
+  useUserbfrPointsWithRank,
+} from '@Views/BFRfarmingLeaderboard/BFRfarmingLeaderboard';
 
 const userDataHeadClass = 'text-f14 text-[#7F87A7]';
 const userDataDescClass = 'text-f16 text-[#C3C2D4]';
@@ -41,7 +45,8 @@ export const UserDataV2 = () => {
     if (!chain) return null;
     return chain.blockExplorers?.default.url;
   }, [chains, activeChain.id]);
-
+  const bfrPointsData = useUserbfrPointsWithRank();
+  console.log(`UserDataV2-bfrPointsData: `, bfrPointsData);
   const mostTradedAsset = useMemo(() => {
     if (!metrics) return null;
     const tradesByassetArray = Object.entries(metrics.tradesByasset);
@@ -137,7 +142,7 @@ export const UserDataV2 = () => {
         <>
           <Col
             className={'winner-card'}
-            head={'Chain'}
+            head={'User Tier'}
             desc={
               <ChainSwitchDropdown
                 baseUrl="/profile"
@@ -154,15 +159,15 @@ export const UserDataV2 = () => {
           />
           <Col
             className={'winner-card'}
-            head={'Daily Rank'}
-            desc={dailyRank}
+            head={'Points Leaderboard Rank'}
+            desc={bfrPointsData?.rank}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
           <Col
             className={'winner-card'}
-            head={'Weekly Rank'}
-            desc={weeklyRank}
+            head={'Points'}
+            desc={bfrPointsData?.amount}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}
           />
