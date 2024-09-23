@@ -150,7 +150,7 @@ export const UserDataV2 = () => {
           />
           <Col
             className={'winner-card'}
-            head={'Points Leaderboard Rank'}
+            head={'Leaderboard Rank'}
             desc={bfrPointsData?.rank || 'NA'}
             headClass={userDataHeadClass}
             descClass={userDataDescClass}

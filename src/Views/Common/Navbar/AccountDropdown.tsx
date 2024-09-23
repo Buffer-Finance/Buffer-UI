@@ -185,7 +185,7 @@ export const AccountDropdown: React.FC = () => {
                     onClick={openChainModal}
                     role="button"
                     test-id="chain-modal"
-                    className={`bg-[#191b20] hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[31px] w-max rounded-[7px] px-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
+                    className={`bg-[#191b20] sm:hidden hover:brightness-125 cursor-pointer flex items-center justify-center text-f13  h-[31px] w-max rounded-[7px] px-3 pr-[1px] sm:pr-1 transition-all duration-300 `}
                   >
                     <div className="flex items-center dropdown-value f15 capitalize weight-400">
                       {chain && chain.name && (

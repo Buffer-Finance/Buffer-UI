@@ -48,7 +48,7 @@ const BFRCounter: React.FC<any> = ({}) => {
     <Link to={'/bfr'}>
       <div
         className={cn(
-          'flex gap-2  chip-styles-BFR-counter transition-all text-[#d4d5df]  hover:brightness-110 w-fit px-3 ',
+          'flex gap-2  chip-styles-BFR-counter transition-all text-[#d4d5df]  hover:brightness-110 w-fit px-3 sm:px-2 ',
           shake ? 'shake' : ''
         )}
         title="BFR Points - Click to learn more"
@@ -57,7 +57,7 @@ const BFRCounter: React.FC<any> = ({}) => {
           <>
             {' '}
             <BufferLogoComponent
-              className="h-[30px] sm:mx-[0px] circle-image  hover:scale-110 transition-all"
+              className="h-[30px]sm:h-[25px] sm:mx-[0px] circle-image  hover:scale-110 transition-all"
               hideText
               logoHeight={20}
               logoWidth={20}
