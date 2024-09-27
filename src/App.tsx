@@ -281,7 +281,7 @@ const AppRoutes = () => {
           path="/*"
           element={
             <Navigate
-              to={'/ab/' + (activeMarketFromStorage || defaultMarket)}
+              to={'/binary/' + (activeMarketFromStorage || defaultMarket)}
             />
           }
         />
