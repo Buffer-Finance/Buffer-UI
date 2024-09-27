@@ -21,6 +21,7 @@ export const useIsMarketOpen = (
     const currentPool = market.pools.find((pool) => {
       return pool.pool === selectedPoolContract;
     });
+    console.log(`currentPool: `, currentPool);
     if (currentPool?.isPaused) return false;
 
     if (

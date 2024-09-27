@@ -23,6 +23,7 @@ import { CurrentPrice } from '../BuyTrade/ActiveTrades/CurrentPrice';
 import { OneDayChange } from '../Markets/AssetSelectorDD/AssetSelectorTable/OneDayChange';
 import { MarketSelectorDD } from './MarketSelectorDD';
 import { Payout } from './Payout';
+import InfoIcon from '@SVG/Elements/InfoIcon';
 
 const OneChart = (props: SVGProps<SVGSVGElement>) => (
   <svg
@@ -183,7 +184,7 @@ const MarketStatsBar: React.FC<{ isMobile?: boolean }> = ({ isMobile }) => {
     //     ),
     // },
     {
-      header: 'Multiplier',
+      header: <div> Multiplier</div>,
       data: (
         <Payout
           token0={activeMarket.token0}

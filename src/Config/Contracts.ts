@@ -126,3 +126,7 @@ export const ContractsConfig = {
 export const pdev = axios.create({
   baseURL: 'https://ponder.buffer.finance/',
 });
+// Dev Server Client
+export const dsc = axios.create({
+  baseURL: 'http://0.0.0.0:8889/',
+});

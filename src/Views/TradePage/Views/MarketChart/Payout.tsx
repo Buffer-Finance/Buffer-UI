@@ -38,7 +38,18 @@ export const Payout: React.FC<{
   }
   payout = payout ? divide(add(payout, '100'), '100') : '0';
 
-  return <div className="b1200:text-center">{payout}x</div>;
+  return (
+    <div
+      className="b1200:text-center"
+      title={
+        'Multiplier is dependent on direction of trade. ' +
+        payout +
+        'x is maximum payout we offer from both the directions'
+      }
+    >
+      {payout}x <span className="text-2">(max)</span>
+    </div>
+  );
 };
 
 export const useSelectedAssetPayout = () => {
@@ -47,24 +58,22 @@ export const useSelectedAssetPayout = () => {
 
   const calculatePayout = useCallback(
     (assetName: string | undefined, optionContract: string) => {
-      if (assetName === undefined) return { payout: null };
+      let baseSettlementFee;
       let payout = null;
-
-      if (readcallData && !isObjectEmpty(readcallData.settlementFees)) {
-        payout = readcallData.settlementFees[getAddress(optionContract)];
+      if (baseSettlementFees) {
+        baseSettlementFee = Math.max(
+          baseSettlementFees['up'].settlement_fee,
+          baseSettlementFees['down'].settlement_fee
+        );
       }
-      if (payout === null) {
-        const baseSettlementFee =
-          baseSettlementFees?.[assetName]?.settlement_fee;
 
-        if (baseSettlementFee) {
-          payout = getPayout(baseSettlementFee.toString());
-        }
+      if (baseSettlementFee) {
+        payout = getPayout(baseSettlementFee.toString());
       }
 
       return { payout };
     },
-    [readcallData, baseSettlementFees]
+    [baseSettlementFees]
   );
 
   return { calculatePayout };

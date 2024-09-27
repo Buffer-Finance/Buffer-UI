@@ -80,7 +80,6 @@ const parseId = (n) => {
 };
 
 const optionsIfc = new ethers.utils.Interface(optionsAbi);
-// TODO = Make these topics dynamic
 // For 7.5k blocks  it is taking 1.5s to scan
 const openTrade =
   '0x2a1e49e7b1b7c4b8c18b286d0308d76c8f509c04830f53f5500340ecf7faea73';

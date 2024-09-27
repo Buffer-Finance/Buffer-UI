@@ -5,7 +5,7 @@ import { MockConnector } from 'wagmi/connectors/mock';
 
 const testClient = createPublicClient({
   transport: http('http://localhost:8545'),
-  chain: arbitrumGoerli, //TODO  - run hardhat chain on this network.
+  chain: arbitrumGoerli,
 });
 
 export const mockConnector = [
@@ -19,7 +19,7 @@ export const mockConnector = [
         transport: custom(testClient),
         chain: arbitrumGoerli,
         account: privateKeyToAccount(
-          '0x2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2' //TODO - substitute it with hardhat account pk
+          '0x2bb545e93a2b27557e40b54f39def6a190fa3ce56b34bcfc80d8709cf60fe0a2'
         ),
       }),
     },

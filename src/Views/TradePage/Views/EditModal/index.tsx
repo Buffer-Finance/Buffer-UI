@@ -154,7 +154,7 @@ export const EditModal: React.FC<{
   const settings = useAtomValue(chartControlsSettingsAtom);
   const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
-  const { data: allSettlementFees } = useSettlementFee();
+  const { data: allSettlementFees } = useSettlementFee(); //FIXME LO Edit
   const products = useProducts();
   const toastify = useToast();
   const editHandler = async () => {

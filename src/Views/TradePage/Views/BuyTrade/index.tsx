@@ -45,7 +45,6 @@ export const BuyTrade: React.FC = () => {
   const { address } = useAccount();
   const { activeMarket } = useActiveMarket();
   // triggering rerender
-  const _setttlementFee = useSettlementFee();
   const amount = useAtomValue(tradeSizeAtom);
   const { calculatePayout } = useSelectedAssetPayout();
   const limitprderPayout = useAtomValue(LimitOrderPayoutAtom);
@@ -117,11 +116,11 @@ export const BuyTrade: React.FC = () => {
       <TradeSizeSelector payout={payout} />
       <TradeTypeSelector />
       <CurrentPrice />
-      <PayoutProfit
+      {/* <PayoutProfit
         amount={zeroify(amount)}
         totalPayout={payout}
         tradeToken={tradeToken}
-      />
+      /> */}
       <BuyButtons
         allowance={allowance}
         amount={amount.toString()}

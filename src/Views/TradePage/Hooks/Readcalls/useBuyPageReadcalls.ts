@@ -21,7 +21,7 @@ export function useBuyTradePageReadcalls() {
   const referralData = useReferralCode();
 
   const config = useMarketsConfig();
-  const { data: baseSettlementFees } = useSettlementFee();
+  const { data: baseSettlementFees } = useSettlementFee(); //FIXME
 
   const calls = useMemo(() => {
     const userSpecificCalls = poolDetails
@@ -92,7 +92,7 @@ export function useBuyTradePageReadcalls() {
                     params: [
                       referralData[3],
                       address,
-                      baseSettlementFee?.toString() ?? '1500',
+                      baseSettlementFee?.toString() ?? '1500', //FIXME what is this?
                     ] as never,
                   });
                 }

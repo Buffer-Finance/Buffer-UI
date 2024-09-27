@@ -17,7 +17,7 @@ import { getConfig } from './getConfig';
 const useLimitOrderHandlers = () => {
   const { activeChain } = useActiveChain();
   const [editLoading, setEditLoading] = useAtom(loeditLoadingAtom);
-  const { data: allSettlementFees } = useSettlementFee();
+  const { data: allSettlementFees } = useSettlementFee(); //FIXME in limit orders
 
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();

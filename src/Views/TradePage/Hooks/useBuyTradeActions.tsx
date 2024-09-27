@@ -78,7 +78,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
 
   const tokenAddress = poolDetails?.tokenAddress;
-  const { data: allSettlementFees } = useSettlementFee();
+  const { data: allSettlementFees } = useSettlementFee(); //FIXME sf at buying time
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = usePublicClient({ chainId: activeChain.id });
   // const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
