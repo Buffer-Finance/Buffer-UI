@@ -17,7 +17,7 @@ import { getConfig } from './getConfig';
 const useLimitOrderHandlers = () => {
   const { activeChain } = useActiveChain();
   const [editLoading, setEditLoading] = useAtom(loeditLoadingAtom);
-  const { data: allSettlementFees } = useSettlementFee(); //FIXME in limit orders
+  const { data: allSettlementFees } = useSettlementFee();
 
   const { oneCtPk, oneCTWallet } = useOneCTWallet();
   const { address } = useAccount();
@@ -53,7 +53,8 @@ const useLimitOrderHandlers = () => {
       setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
       const settlement_fee = trade.settlement_fee.toString();
-      const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
+      const bsesettelmentFeeObj =
+        allSettlementFees?.[trade.is_above ? 'up' : 'down'];
       const expandedStrike = round(multiply(strike, 8), 0)!;
 
       const signs = await generateBuyTradeSignature(

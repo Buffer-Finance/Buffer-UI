@@ -1,14 +1,15 @@
 import NumberTooltip from '@Views/Common/Tooltips';
 import { ReactNode } from 'react';
 import { useGasPrice } from 'wagmi';
-
+import { useMemo, useEffect } from 'react';
 // const MAX_GAS_PRICE = 300000n;
 const MAX_GAS_PRICE = 56000000n;
 
 export function useGasPriceCheck() {
   const { data: currentGasPrice } = useGasPrice({ chainId: 42161 });
-  console.log('currentGasPrice', currentGasPrice);
-  const isGasPriceHigh = currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
+  const isGasPriceHigh = useMemo(() => {
+    return currentGasPrice && currentGasPrice > MAX_GAS_PRICE;
+  }, [currentGasPrice]);
 
   return { isGasPriceHigh };
 }

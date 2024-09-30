@@ -7,7 +7,15 @@ import MemoTimeIcon from '@SVG/Elements/TimeIcon';
 import UpIcon from '@SVG/Elements/UpIcon';
 import { getLastbar } from '@TV/useDataFeed';
 import { isUSDCSelected } from '@TV/utils';
-import { lt } from '@Utils/NumString/stringArithmatics';
+import { toFixed } from '@Utils/NumString';
+import {
+  add,
+  divide,
+  lt,
+  multiply,
+  subtract,
+} from '@Utils/NumString/stringArithmatics';
+import { cn } from '@Utils/cn';
 import { ConnectionRequired } from '@Views/Common/Navbar/AccountDropdown';
 import { BlueBtn, BufferButton } from '@Views/Common/V2-Button';
 import { isOneCTModalOpenAtom } from '@Views/OneCT/OneCTButton';
@@ -17,16 +25,18 @@ import { useBuyTradeActions } from '@Views/TradePage/Hooks/useBuyTradeActions';
 import { useCurrentPrice } from '@Views/TradePage/Hooks/useCurrentPrice';
 import { useIsMarketOpen } from '@Views/TradePage/Hooks/useIsMarketOpen';
 import { useLimitOrdersExpiry } from '@Views/TradePage/Hooks/useLimitOrdersExpiry';
+import { useSettlementFee } from '@Views/TradePage/Hooks/useSettlementFee';
 import { useSwitchPool } from '@Views/TradePage/Hooks/useSwitchPool';
 import {
   activePoolObjAtom,
   limitOrderStrikeAtom,
   tradeTypeAtom,
 } from '@Views/TradePage/atoms';
+import getPayout, { getMultiplier } from '@Views/TradePage/utils/getPayout';
 import { Skeleton } from '@mui/material';
 import { useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAtom, useAtomValue, useSetAtom } from 'jotai';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 
 export const BuyButtons = ({
@@ -70,10 +80,18 @@ export const BuyButtons = ({
     switchPool?.optionContract
   );
   const [{ activePool }, setActivePool] = useAtom(activePoolObjAtom);
-  console.log(`BuyButtons-activePool: `, activePool);
 
   const { viewOnlyMode } = useUserAccount();
+  const { isGasPriceHigh } = useGasPriceCheck();
+  useEffect(() => {
+    console.log(`isGasPriceHigh-c${isGasPriceHigh}`);
+  }, [isGasPriceHigh]);
+  const { data: sfs } = useSettlementFee();
+  useEffect(() => {
+    console.log(`sfs-c${sfs}`);
+  }, [sfs]);
 
+  console.log(`BuyButtons-sfs: `, sfs);
   const buyTrade = (isUp?: boolean) => {
     if (!account) return openConnectModal?.();
     if (activeAssetPrice == null)
@@ -111,10 +129,6 @@ export const BuyButtons = ({
         View Only Mode
       </BlueBtn>
     );
-  const { isGasPriceHigh } = useGasPriceCheck();
-  console.log(`BuyButtons-isGasPriceHigh: `, isGasPriceHigh);
-
-  console.log(`BuyButtons-isAssetActive: `, isAssetActive);
   return (
     <>
       {/* <ApproveModal
@@ -171,7 +185,7 @@ export const BuyButtons = ({
                     loading?.is_up === true
                   }
                   test-id="last-up-btn"
-                  className={` text-1 bg-green hover:text-1 ${
+                  className={` group relative  mb-3  text-1 bg-green hover:text-1 ${
                     center
                       ? tradeType != 'Limit'
                         ? 'min-h-full'
@@ -179,10 +193,20 @@ export const BuyButtons = ({
                       : ''
                   }`}
                 >
+                  <DisplayPayout
+                    className={
+                      'absolute top-[102%] left-[50%] -translate-x-1/2'
+                    }
+                    settlementFee={sfs?.up.settlement_fee}
+                    amount={amount}
+                  />
                   {center && tradeType == 'Limit' ? (
                     <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] ">
                       <div className="flex-col flex items-start">
-                        <span className="text-f14 font-bold mb-[-2px]">Up</span>
+                        <span className="text-f14 font-bold  flex mb-[-2px]">
+                          Up
+                          <DisplaySF settlementFee={sfs?.down.settlement_fee} />
+                        </span>
                         <span className="text-f11">{limitStrike}</span>
                       </div>
                       <div>
@@ -193,6 +217,7 @@ export const BuyButtons = ({
                     <>
                       <UpIcon className="mr-[6px] scale-150" />
                       <span>Up</span>
+                      <DisplaySF settlementFee={sfs?.up.settlement_fee} />
                     </>
                   )}
                 </BufferButton>
@@ -204,7 +229,7 @@ export const BuyButtons = ({
                     typeof loading !== 'number' &&
                     loading?.is_up === false
                   }
-                  className={` text-1 bg-red ${
+                  className={`group relative mb-3 text-1 bg-red ${
                     center
                       ? tradeType != 'Limit'
                         ? 'min-h-full'
@@ -213,8 +238,16 @@ export const BuyButtons = ({
                   }`}
                   onClick={() => buyTrade(false)}
                 >
+                  <DisplayPayout
+                    className={
+                      'absolute top-[102%] left-[50%] text-red -translate-x-1/2'
+                    }
+                    settlementFee={sfs?.down.settlement_fee}
+                    amount={amount}
+                  />
+
                   {center && tradeType == 'Limit' ? (
-                    <div className="flex justify-between items-center w-full px-[13px] py-[3px] pt-[2px] flex-row-reverse ">
+                    <div className="flex  relative justify-between items-center w-full px-[13px] py-[3px] pt-[2px] flex-row-reverse ">
                       <div className="flex-col flex items-end">
                         <span className="text-f14 font-bold mb-[-2px]">
                           Down
@@ -229,10 +262,12 @@ export const BuyButtons = ({
                     <>
                       <DownIcon className="mr-[6px] scale-150" />
                       <span>Down</span>
+                      <DisplaySF settlementFee={sfs?.down.settlement_fee} />
                     </>
                   )}
                 </BufferButton>
               </div>
+
               {/* {!isApprovalLocked && (
                 <div
                   className="approve-btn-styles text-f12 text-3 hover:text-1 hover:brightness-125 transition-all duration-150 w-fit mx-auto sm:text-f13 mt-3"
@@ -247,5 +282,35 @@ export const BuyButtons = ({
         </span>
       </ConnectionRequired>{' '}
     </>
+  );
+};
+
+export const DisplaySF = ({ settlementFee }) => {
+  if (!settlementFee) return null;
+  return (
+    <div className=" group-hover:text-1 group-hover:font-semibold text-[#e0e0e0] text-f10  ml-[2px] mt-[2px]">
+      ({getMultiplier(settlementFee)[1]})
+    </div>
+  );
+};
+export const DisplayPayout = ({ settlementFee, amount, className }) => {
+  if (!settlementFee) return null;
+  let totalPayout = getPayout(settlementFee);
+
+  totalPayout = totalPayout ? divide(add(totalPayout, '100'), '100') : '0';
+
+  const payoutwillbe = multiply(totalPayout, amount);
+  const pnl = toFixed(subtract(payoutwillbe, amount), 2);
+
+  if (!settlementFee) return null;
+  return (
+    <div
+      className={cn(
+        ' group-hover:scale-110 transition-transform text-green font-bold text-[8px]',
+        className
+      )}
+    >
+      +{pnl} USDC
+    </div>
   );
 };

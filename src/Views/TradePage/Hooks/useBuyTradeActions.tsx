@@ -78,7 +78,7 @@ export const useBuyTradeActions = (userInput: string) => {
   const tokenName = poolDetails?.token;
 
   const tokenAddress = poolDetails?.tokenAddress;
-  const { data: allSettlementFees } = useSettlementFee(); //FIXME sf at buying time
+  const { data: allSettlementFees } = useSettlementFee();
   const [expiration] = useAtom(timeSelectorAtom);
   const provider = usePublicClient({ chainId: activeChain.id });
   // const { highestTierNFT } = useHighestTierNFT({ userOnly: true });
@@ -358,7 +358,8 @@ export const useBuyTradeActions = (userInput: string) => {
       //   ),
       // };
       try {
-        let settelmentFee = allSettlementFees[activeAsset.tv_id];
+        let settelmentFee =
+          allSettlementFees[customTrade.is_up ? 'up' : 'down'];
         const spread = allSpreads?.[activeAsset.tv_id];
         if (spread === undefined || spread === null) {
           throw new Error('Spread not found');

@@ -21,7 +21,7 @@ export function useBuyTradePageReadcalls() {
   const referralData = useReferralCode();
 
   const config = useMarketsConfig();
-  const { data: baseSettlementFees } = useSettlementFee(); //FIXME
+  // const { data: baseSettlementFees } = useSettlementFee(); //FIXME
 
   const calls = useMemo(() => {
     const userSpecificCalls = poolDetails
@@ -56,10 +56,10 @@ export function useBuyTradePageReadcalls() {
     let optionCalls = config
       ? config
           .map((market) => {
-            const baseSettlementFee =
-              baseSettlementFees?.[
-                joinStrings(market.token0, market.token1, '')
-              ]?.settlement_fee;
+            // const baseSettlementFee =
+            //   baseSettlementFees?.[
+            //     joinStrings(market.token0, market.token1, '')
+            //   ]?.settlement_fee;
             const creation_window = market.creation_window_contract;
 
             return market.pools
@@ -84,16 +84,12 @@ export function useBuyTradePageReadcalls() {
                     params: [],
                   },
                 ];
-                if (address && baseSettlementFee) {
+                if (address) {
                   calls.push({
                     address: pool.optionContract,
                     abi: OptionContractABI,
                     name: 'getSettlementFeePercentage',
-                    params: [
-                      referralData[3],
-                      address,
-                      baseSettlementFee?.toString() ?? '1500', //FIXME what is this?
-                    ] as never,
+                    params: [referralData[3], address, '1500'] as never,
                   });
                 }
                 if (creation_window !== undefined) {
