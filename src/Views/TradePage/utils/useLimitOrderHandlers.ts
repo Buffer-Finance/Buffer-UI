@@ -54,7 +54,7 @@ const useLimitOrderHandlers = () => {
       const currentTs = Math.round(Date.now() / 1000);
       const settlement_fee = trade.settlement_fee.toString();
       const bsesettelmentFeeObj =
-        allSettlementFees?.[trade.is_above ? 'up' : 'down'];
+        allSettlementFees?.[trade.is_above ? 'up' : 'down']; //FIXME use older sf signatures.
       const expandedStrike = round(multiply(strike, 8), 0)!;
 
       const signs = await generateBuyTradeSignature(

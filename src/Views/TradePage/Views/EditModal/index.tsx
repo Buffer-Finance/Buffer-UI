@@ -154,7 +154,7 @@ export const EditModal: React.FC<{
   const settings = useAtomValue(chartControlsSettingsAtom);
   const [val, setVal] = useState(settings.loDragging);
   const { oneCTWallet, oneCtPk } = useOneCTWallet();
-  const { data: allSettlementFees } = useSettlementFee(); //FIXME LO Edit
+  const { data: allSettlementFees } = useSettlementFee();
   const products = useProducts();
   const toastify = useToast();
   const editHandler = async () => {
@@ -176,7 +176,8 @@ export const EditModal: React.FC<{
       setEditLoading(trade.queue_id);
       const currentTs = Math.round(Date.now() / 1000);
       const settlement_fee = getSettlementFee(payout);
-      const bsesettelmentFeeObj = allSettlementFees[trade.market.tv_id];
+      const bsesettelmentFeeObj =
+        allSettlementFees?.[buttonDirection == directionBtn.Up ? 'up' : 'down']; //FIXME User might edit trade of some other durations
 
       const signs = await generateBuyTradeSignature(
         address,
