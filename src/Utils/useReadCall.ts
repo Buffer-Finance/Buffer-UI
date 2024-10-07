@@ -64,23 +64,31 @@ export const useCall2Data = (contracts: any, swrKey: string) => {
   const { address: account } = useUserAccount();
   const { address } = useAccount();
   const { cache } = useSWRConfig();
+
   const key = swrKey + activeChain.id + account + chainInURL;
 
   const client = useMemo(() => {
+    console.log('activecahin', activeChain)
     return createPublicClient({
       chain: activeChain,
-      transport: http(),
+      transport: http(activeChain.rpcUrls.default.http[0]),
     });
   }, [activeChain]);
 
   return useSWR(calls && calls.length ? key : null, {
     fetcher: async () => {
       if (!calls) return null;
+      if (swrKey.includes('trade')) {
+        console.log('key', swrKey + activeChain.id + account)
+      }
       let returnData = await viemMulticall(
         calls,
         client,
         swrKey + activeChain.id + account
       );
+      if (swrKey.includes('trade')) {
+        console.log('key-res', returnData)
+      }
       return returnData || cache.get(key);
     },
     refreshInterval: 900,

@@ -9,6 +9,7 @@ export const viemMulticall = async (
   client: PublicClient,
   key: string
 ) => {
+
   // convert to multicall expected format
   const convertedCalls = calls.map((c) => ({
     functionName: c.name,
@@ -17,9 +18,15 @@ export const viemMulticall = async (
     address: c.address,
     id: c.id,
   }));
+  if (key.includes('trade')) {
+    console.log('rooot-deb-in')
+  }
   const results = await client.multicall({ contracts: convertedCalls });
   let resultMap = {};
   results.forEach((r, i) => {
+    if (calls[i]?.id?.includes('tarde')) {
+      console.log('call', calls[i])
+    }
     const copy = getDeepCopy(r);
     convertBNtoString(copy);
 
@@ -27,6 +34,9 @@ export const viemMulticall = async (
     resultMap[id] = [copy.result];
     // }
   });
+  if (key.includes('trade')) {
+    console.log('rooot-deb-', resultMap)
+  }
 
   return resultMap;
   /*

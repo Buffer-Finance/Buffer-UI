@@ -5,10 +5,11 @@ import { defineConfig, loadEnv } from 'vite';
 import viteTsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vitejs.dev/config/
-export default defineConfig(({ command, mode }) => {
+const config = defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
   // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
   const env = loadEnv(mode, process.cwd(), '');
+  console.log('from app', env)
   return {
     // server: {
     //   hmr: false,
@@ -49,6 +50,10 @@ export default defineConfig(({ command, mode }) => {
 
     define: {
       __APP_ENV__: env.APP_ENV,
+      isDevnet: env?.VITE_ENV == 'devnet'
     },
   };
 });
+
+
+export default config;

@@ -60,6 +60,7 @@ const options = {
 import { inject } from '@vercel/analytics';
 import { BlueBtn } from '@Views/Common/V2-Button';
 import { arbitrum, arbitrumSepolia } from 'viem/chains';
+import { defineChain } from 'viem';
 inject();
 if (typeof Node === 'function' && Node.prototype) {
   const originalRemoveChild = Node.prototype.removeChild;
@@ -112,14 +113,23 @@ if (import.meta.env.VITE_MODE === 'production') {
     ],
   });
 }
+
+
+let customAnvil = JSON.parse(JSON.stringify(arbitrum));
+customAnvil.rpcUrls.default.http = ['http://localhost:2020'];
+customAnvil.name = "arbitrum-main-fork";
+customAnvil.id = 42161121;
+
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
   projectId: 'YOUR_PROJECT_ID',
   chains: [
-    process.env.ENV?.toLowerCase() == 'testnet' ? arbitrumSepolia : arbitrum,
+    isDevnet ? customAnvil : arbitrum,
+    customAnvil
   ],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
+export const allChains = config.chains;
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Sentry.ErrorBoundary fallback={<ErrorComponenet />}>
     <WagmiProvider config={config}>

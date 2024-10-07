@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 export const useUserOneCTData = () => {
   const { activeChain } = useActiveChain();
   const activeChainId = activeChain?.id;
+  console.log('activeChainId,', activeChainId)
   const { address: userAddress } = useAccount();
   const { data: productNames } = useProductName();
   const toastify = useToast();
@@ -29,7 +30,7 @@ export const useUserOneCTData = () => {
       try {
         const response = await axios.get(
           baseUrl +
-            `user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
+          `user/onc_ct/?environment=${activeChainId}&user=${userAddress}`
         );
         return response.data;
       } catch (e) {

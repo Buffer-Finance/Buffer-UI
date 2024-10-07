@@ -122,6 +122,71 @@ export const ContractsConfig = {
       },
     },
   },
+  42161121: {
+    graph: {
+      ABOVE_BELOW:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.6-ab-add-usd-values/api',
+      MAIN: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.6-arbitrum-one/version/v0.0.4-ud-trades-markets/api',
+      EVENTS:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/events/version/v2.5-up-events-mainnet/api',
+      REWARDS: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/jackpot/api`,
+      LEADERBOARD: `https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/mainnet-dummy/version/v0.0.11-leaderboard-price-fix/api`,
+      DASHBOARD:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/v2.5-arbitrum-mainnet/version/v2.9.1-ud-ab-nfts-leagues-stats-defillama-merge/api',
+      PROFILE:
+        'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/arbitrum-mainnet/version/v2.7.2-v2.6-profile-data/api',
+      LP: 'https://subgraph.satsuma-prod.com/e66b06ce96d2/bufferfinance/mainnet-dummy/version/v0.0.6-lp-price-fix/api',
+    },
+    signer_manager: '0xdc43CeA44593F9054BB52b7161981918ABdE067a',
+    ab: {
+      router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
+    },
+    ud: {
+      router: '0xf4cc4978C5d80945364fBdBD3750429505ADeB89',
+    },
+    jackpot: '0xe34cd1D40733B991fea9ea8545Fa1F490200d6e8',
+    poolsInfo: {
+      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: '0x0000000000000000000000000000000000000000',
+        decimals: 6,
+        token: 'USDC.e',
+        permitName: 'USD Coin (Arb1)',
+        is_pol: false,
+      },
+      '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
+        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+        faucet: null,
+        decimals: 6,
+        token: 'USDC',
+        is_pol: true,
+      },
+      '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
+        tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
+        faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
+        decimals: 6,
+        token: 'USDC',
+        permitName: 'USDC',
+        is_pol: false,
+      },
+      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
+        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
+        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
+        decimals: 18,
+        token: 'BFR',
+        permitName: 'Token',
+        is_pol: false,
+      },
+      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
+        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
+        faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
+        decimals: 18,
+        token: 'ARB',
+        permitName: 'Arbitrum',
+        is_pol: false,
+      },
+    },
+  },
 };
 export const pdev = axios.create({
   baseURL: 'https://ponder.buffer.finance/',

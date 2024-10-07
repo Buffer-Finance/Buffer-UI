@@ -588,20 +588,10 @@ export type earnConfigType = keyof (typeof appConfig)['42161']['EarnConfig'];
 export const defaultMarket = 'BTC-USD';
 export const PRICE_DECIMALS = 1e8;
 export const isTestnet = import.meta.env.VITE_ENV.toLowerCase() === 'testnet';
-export const ABBaseURL = isTestnet
-  ? ' https://instant-trading-backend-production-84c6.up.railway.app/'
+export const ABBaseURL = isDevnet
+  ? 'http://localhost:4004/'
   : 'https://api-v2.6.buffer.finance/';
 export const aboveBelowBaseUrl = ABBaseURL;
-
-const baseURLString = isTestnet
-  ? isSandbox
-    ? 'VITE_INSTANT_TRADING_HOST_DEVELOPMENT'
-    : `VITE_INSTANT_TRADING_HOST_TESTNET`
-  : `VITE_INSTANT_TRADING_HOST`;
-
-const aboveBelowURLString = isTestnet
-  ? 'VITE_ABOVE_BEWLOW_API_HOST_TESTNET'
-  : 'VITE_ABOVE_BEWLOW_API_HOST_DEVELOPMENT';
 
 export const baseUrl = ABBaseURL;
 export const TRADE_IN_A_PAGE_TRADES_TABLES = 10;

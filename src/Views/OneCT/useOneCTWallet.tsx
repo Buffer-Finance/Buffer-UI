@@ -70,6 +70,7 @@ const useOneCTWallet = () => {
   const [createLoading, setCreateLoading] = useAtom(createLoadingAtom);
   const { activeChain } = uesOneCtActiveChain();
   const configData = getConfig(activeChain.id);
+  console.log('configdata', configData)
   const provider = usePublicClient({ chainId: activeChain.id });
   const setModal = useSetAtom(isOneCTModalOpenAtom);
   const [shouldStartTimer, setShouldStartTimer] = useState(false);
@@ -146,8 +147,7 @@ const useOneCTWallet = () => {
         { name: 'chainId', type: 'uint256' },
       ],
     } as const;
-
-    const signature = await signTypedDataAsync({
+    const fullObj = {
       types,
       domain,
       primaryType: 'Registration',
@@ -156,7 +156,9 @@ const useOneCTWallet = () => {
         nonce: BigInt(nonce),
         chainId: activeChain.id as any,
       },
-    });
+    }
+    console.log('fullObj', fullObj, '')
+    const signature = await signTypedDataAsync(fullObj);
     console.log(`useOneCTWallet-signature: `, signature);
     const privateKey = ethers.utils.keccak256(signature).slice(2);
     console.log(`useOneCTWallet-privateKey: `, privateKey);
@@ -321,8 +323,7 @@ const useOneCTWallet = () => {
           { name: 'nonce', type: 'uint256' },
         ],
       } as const;
-
-      const signature = await signTypedDataAsync({
+      const fullObj = {
         types,
         domain,
         primaryType: 'RegisterAccount',
@@ -331,7 +332,9 @@ const useOneCTWallet = () => {
           user: address,
           nonce: BigInt(res?.nonce),
         },
-      });
+      }
+      console.log('fullObj', fullObj);
+      const signature = await signTypedDataAsync(fullObj);
 
       if (!signature) {
         setRegistrationLaoding(false);

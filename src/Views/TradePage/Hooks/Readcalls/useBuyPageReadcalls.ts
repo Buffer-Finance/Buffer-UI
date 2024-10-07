@@ -26,85 +26,85 @@ export function useBuyTradePageReadcalls() {
   const calls = useMemo(() => {
     const userSpecificCalls = poolDetails
       ? [
-          {
-            address: poolDetails.tokenAddress,
-            abi: erc20ABI,
-            name: 'balanceOf',
-            params: [address],
-          },
-          {
-            address: poolDetails.tokenAddress,
-            abi: CustomERC20ABI,
-            name: 'nonces',
-            params: [address],
-          },
-          {
-            address: poolDetails.tokenAddress,
-            abi: erc20ABI,
-            name: 'allowance',
-            params: [address, configData.router],
-          },
-          // {
-          //   address: configData.signer_manager,
-          //   abi: SignerABI,
-          //   name: 'accountMapping',
-          //   params: [address],
-          // },
-        ]
+        {
+          address: poolDetails.tokenAddress,
+          abi: erc20ABI,
+          name: 'balanceOf',
+          params: [address],
+        },
+        {
+          address: poolDetails.tokenAddress,
+          abi: CustomERC20ABI,
+          name: 'nonces',
+          params: [address],
+        },
+        {
+          address: poolDetails.tokenAddress,
+          abi: erc20ABI,
+          name: 'allowance',
+          params: [address, configData.router],
+        },
+        // {
+        //   address: configData.signer_manager,
+        //   abi: SignerABI,
+        //   name: 'accountMapping',
+        //   params: [address],
+        // },
+      ]
       : [];
 
     let optionCalls = config
       ? config
-          .map((market) => {
-            // const baseSettlementFee =
-            //   baseSettlementFees?.[
-            //     joinStrings(market.token0, market.token1, '')
-            //   ]?.settlement_fee;
-            const creation_window = market.creation_window_contract;
+        .map((market) => {
+          // const baseSettlementFee =
+          //   baseSettlementFees?.[
+          //     joinStrings(market.token0, market.token1, '')
+          //   ]?.settlement_fee;
+          const creation_window = market.creation_window_contract;
 
-            return market.pools
-              .map((pool) => {
-                const calls = [
-                  {
-                    address: pool.optionContract,
-                    abi: OptionContractABI,
-                    name: 'getMaxTradeSize',
-                    params: [],
-                  },
-                  {
-                    address: pool.optionContract,
-                    abi: OptionContractABI,
-                    name: 'getMaxOI',
-                    params: [],
-                  },
-                  {
-                    address: pool.optionContract,
-                    abi: OptionContractABI,
-                    name: 'totalMarketOI',
-                    params: [],
-                  },
-                ];
-                if (address) {
-                  calls.push({
-                    address: pool.optionContract,
-                    abi: OptionContractABI,
-                    name: 'getSettlementFeePercentage',
-                    params: [referralData[3], address, '1500'] as never,
-                  });
-                }
-                if (creation_window !== undefined) {
-                  calls.push({
-                    address: creation_window,
-                    abi: CreationWindowABI,
-                    name: 'isInCreationWindow',
-                    params: [timeToMins('00:60') as never],
-                  });
-                }
-                return calls;
-              })
-              .flat(1);
-          })
-          .flat(1)
+          return market.pools
+            .map((pool) => {
+              const calls = [
+                {
+                  address: pool.optionContract,
+                  abi: OptionContractABI,
+                  name: 'getMaxTradeSize',
+                  params: [],
+                },
+                {
+                  address: pool.optionContract,
+                  abi: OptionContractABI,
+                  name: 'getMaxOI',
+                  params: [],
+                },
+                {
+                  address: pool.optionContract,
+                  abi: OptionContractABI,
+                  name: 'totalMarketOI',
+                  params: [],
+                },
+              ];
+              if (address) {
+                calls.push({
+                  address: pool.optionContract,
+                  abi: OptionContractABI,
+                  name: 'getSettlementFeePercentage',
+                  params: [referralData[3], address, '1500'] as never,
+                });
+              }
+              if (creation_window !== undefined) {
+                calls.push({
+                  address: creation_window,
+                  abi: CreationWindowABI,
+                  name: 'isInCreationWindow',
+                  params: [timeToMins('00:60') as never],
+                });
+              }
+              return calls;
+            })
+            .flat(1);
+        })
+        .flat(1)
       : [];
 
     if (!address) {
@@ -113,5 +113,7 @@ export function useBuyTradePageReadcalls() {
 
     return [...userSpecificCalls, ...optionCalls!];
   }, [poolDetails, address, config]);
-  return useCall2Data(calls, 'trade-page-callls' + address);
+  const data = useCall2Data(calls, 'trade-page-callls' + address);
+  console.log('deb-2', calls, data)
+  return data;
 }

@@ -28,6 +28,7 @@ export const useBuyTradeData = (deb?: string) => {
   const config = useMarketsConfig();
   const setBuyTradeData = useSetAtom(buyTradeDataAtom);
   const response = useMemo(() => {
+    console.log(readCallData, 'rd-data')
     if (!readCallData || Object.entries(readCallData).length === 0) {
       return null;
     }
@@ -71,7 +72,7 @@ export const useBuyTradeData = (deb?: string) => {
 
         const settlement_fee =
           readCallData[
-            getCallId(pool.optionContract, 'getSettlementFeePercentage')
+          getCallId(pool.optionContract, 'getSettlementFeePercentage')
           ]?.[0];
         if (settlement_fee) {
           settlementFees[pool.optionContract] = getPayout(settlement_fee);
@@ -79,8 +80,8 @@ export const useBuyTradeData = (deb?: string) => {
 
         creationWindows[pool.optionContract] = item.creation_window_contract
           ? readCallData[
-              getCallId(item.creation_window_contract, 'isInCreationWindow')
-            ]?.[0]
+          getCallId(item.creation_window_contract, 'isInCreationWindow')
+          ]?.[0]
           : 'true';
       });
     });

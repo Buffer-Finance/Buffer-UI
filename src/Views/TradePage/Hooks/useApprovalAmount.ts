@@ -26,8 +26,9 @@ export const useApprvalAmount = () => {
       try {
         const { data, status } = await axios.get(
           baseUrl +
-            `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}&product_id=${products.UP_DOWN.product_id}`
+          `user/approval/?environment=${activeChainId}&user=${userAddress}&token=${tokenName}&product_id=${products.UP_DOWN.product_id}`
         );
+        console.log('approval-data', data)
         if (status !== 200) return cache.get(id);
         return data;
       } catch (e) {
