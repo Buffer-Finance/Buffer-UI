@@ -33,9 +33,10 @@ const SidebySideCharts = ({
   );
 };
 
-const MarketChart: React.FC<any> = ({}) => {
+const MarketChart: React.FC<any> = ({ }) => {
   const isTableExpanded = useAtomValue(isTableShownAtom);
   const v3AppConfig = useMarketsConfig();
+  console.log('v3AppConfig', v3AppConfig)
   const chartTimes = useAtomValue(chartNumberAtom);
   const { activeMarket } = useActiveMarket();
   const [dragging, setDragging] = useState(false);
@@ -80,8 +81,8 @@ const MarketChart: React.FC<any> = ({}) => {
       if (
         containerRef.current &&
         containerRef.current?.getBoundingClientRect().height -
-          updatedChartContainerDim.height >
-          35
+        updatedChartContainerDim.height >
+        35
       ) {
         onMouseUp();
       }
@@ -182,11 +183,10 @@ const MarketChart: React.FC<any> = ({}) => {
           onMouseUp={onMouseUp}
           onTouchEnd={onMouseUp}
           // onMouseLeave={onMouseUp}
-          className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${
-            dragging ? ' bg-blue brightness-125' : ''
-          }`}
-          // onDragStart={onDragStart}
-          // onDragEnd={onDragEnd}
+          className={` w-full   cursor-row-resize h-[5px] hover:bg-blue ${dragging ? ' bg-blue brightness-125' : ''
+            }`}
+        // onDragStart={onDragStart}
+        // onDragEnd={onDragEnd}
         ></div>
       )}
     </>

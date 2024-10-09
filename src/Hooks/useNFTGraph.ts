@@ -16,7 +16,7 @@ export const useNFTGraph = (a?: any) => {
   const { address: account } = useUserAccount();
   const { data } = useSWR(`nfts-the-graph-account-${account}-claimed`, {
     fetcher: async () => {
-      const response = await axios.post('https://ponder.buffer.finance/', {
+      const response = await axios.post(indexer_url, {
         query: `{ 
           nfts(where: {owner:"${account}"  }) {
           items {

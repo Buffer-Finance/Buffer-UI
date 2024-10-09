@@ -57,7 +57,7 @@ export function useBlpData(activeChain: Chain, activePool: poolsType) {
                 }`;
       try {
         const { data, status } = await axios.post(
-          'https://ponder.buffer.finance/',
+          indexer_url,
           {
             query,
           }

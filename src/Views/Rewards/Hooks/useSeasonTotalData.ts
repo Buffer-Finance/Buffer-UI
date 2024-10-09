@@ -32,7 +32,7 @@ export const useSeasonTotalData = (weekId: number) => {
             `;
       try {
         const { data, status } = await axios.post(
-          'https://ponder.buffer.finance/',
+          indexer_url,
           {
             query,
           }

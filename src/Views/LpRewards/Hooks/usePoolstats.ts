@@ -5,7 +5,7 @@ import { Chain } from 'wagmi';
 import { poolStats, poolsType } from '../types';
 
 export const usePoolStats = (activeChain: Chain, activePool: poolsType) => {
-  const graphUrl = 'https://ponder.buffer.finance/';
+  const graphUrl = indexer_url;
 
   return useSWR<poolStats[]>(`${activeChain}-${activePool}-blp-stats`, {
     fetcher: async () => {

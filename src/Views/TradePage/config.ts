@@ -131,6 +131,7 @@ export const appConfig = {
         faucet: null,
         decimals: 6,
         token: 'USDC',
+        permitName: 'USD Coin',
         is_pol: true,
       },
       '0x9501a00d7d4BC7558196B2e4d61c0ec5D16dEfb2': {
@@ -238,47 +239,7 @@ export const appConfig = {
       ContractsConfig?.[42161121]?.jackpot ||
       '0xEa0b956A04b265A7E2A6d00A4bD65a48C430cE16',
     above_below_router: '0x94582981c3be6092b912265C2d2cE172e7f9c3B1',
-    poolsInfo: {
-      '0x6Ec7B10bF7331794adAaf235cb47a2A292cD9c7e': {
-        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: '0x0000000000000000000000000000000000000000',
-        decimals: 6,
-        token: 'USDC.e',
-        permitName: 'USD Coin (Arb1)',
-        is_pol: false,
-      },
-      '0xfD9f8841C471Fcc55f5c09B8ad868BdC9eDeBDE1': {
-        tokenAddress: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
-        faucet: null,
-        decimals: 6,
-        token: 'USDC',
-        is_pol: true,
-      },
-      '0x9501a00d7d4BC7558196B2e4d61c0ec5D16dEfb2': {
-        tokenAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
-        faucet: null,
-        decimals: 6,
-        token: 'USDC',
-        permitName: 'USD Coin',
-        is_pol: false,
-      },
-      '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
-        tokenAddress: '0x9132016099CEbb740db64A36da0D3307824Ad159',
-        faucet: '0x62Db9CD484b3B59e1d0444cea1f0D0D3c00bf2F5',
-        decimals: 18,
-        token: 'BFR',
-        permitName: 'Token',
-        is_pol: false,
-      },
-      '0xaE0628C88EC6C418B3F5C005f804E905f8123833': {
-        tokenAddress: '0x912CE59144191C1204E64559FE8253a0e49E6548',
-        faucet: '0x6B655D99962F58B9Aa0fFB18281408CdBCf61800',
-        decimals: 18,
-        token: 'ARB',
-        permitName: 'Arbitrum',
-        is_pol: false,
-      },
-    },
+    poolsInfo: ContractsConfig?.[42161121].poolsInfo,
 
     EarnConfig: {
       RewardRouter: '0xbD5FBB3b2610d34434E316e1BABb9c3751567B67',

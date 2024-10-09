@@ -159,14 +159,15 @@ export const ContractsConfig = {
         faucet: null,
         decimals: 6,
         token: 'USDC',
+        permitName: 'USD Coin',
         is_pol: true,
       },
-      '0xEe8f62C080A6da2B91ab3478D58e6999daAAb8be': {
-        tokenAddress: '0x7Fe2dD3b4619802B8c4b404f5e440756391439ba',
-        faucet: '0xB54521E255d23F2fA7f37d29C7E76D8FFa85fc05',
+      '0xf9b92Fde16c458953a479464e46F4ddf3B0B183e': {
+        tokenAddress: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+        faucet: null,
         decimals: 6,
         token: 'USDC',
-        permitName: 'USDC',
+        permitName: 'USD Coin',
         is_pol: false,
       },
       '0x70086DFD2b089359A6582A18D24aBE1AcE40f8D0': {
@@ -189,9 +190,9 @@ export const ContractsConfig = {
   },
 };
 export const pdev = axios.create({
-  baseURL: 'https://ponder.buffer.finance/',
+  baseURL: indexer_url,
 });
 // Dev Server Client
 export const dsc = axios.create({
-  baseURL: 'http://0.0.0.0:8889/',
+  baseURL: 'http://localhost:4004/',
 });

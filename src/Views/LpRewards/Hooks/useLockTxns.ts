@@ -7,7 +7,7 @@ import { lockTxn, poolsType } from '../types';
 import { getAddress } from 'viem';
 
 export const useLockTxns = (activeChain: Chain, activePool: poolsType) => {
-  const graphUrl = 'https://ponder.buffer.finance/';
+  const graphUrl = indexer_url;
   const { address } = useUserAccount();
 
   return useSWR<{ nftPoolTxns: lockTxn[]; totalTxns: { totalTxns: string }[] }>(

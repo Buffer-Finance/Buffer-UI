@@ -16,7 +16,7 @@ export const useMarketsRequest = () => {
         (optionContract) =>
           optionContract.poolContract !== null &&
           getAddress(configData.router) ===
-            getAddress(optionContract.routerContract) &&
+          getAddress(optionContract.routerContract) &&
           optionContract.configContract !== null
       ),
     },
@@ -51,7 +51,7 @@ export const useV2Markets = () => {
           optionContract.poolContract === null &&
           configData['v2_router'] &&
           getAddress(configData['v2_router']) ===
-            getAddress(optionContract.routerContract)
+          getAddress(optionContract.routerContract)
       ),
     },
     error,
@@ -65,7 +65,7 @@ export const useBothVersionsMarkets = () => {
   const configData = getConfig(activeChain.id);
 
   async function fetcher(): Promise<response> {
-    const response = await axios.post('https://ponder.buffer.finance/', {
+    const response = await axios.post(indexer_url, {
       query: `{ 
         optionContracts(limit:1000){
           items{
@@ -117,9 +117,9 @@ export const useBothVersionsMarkets = () => {
           if (option.poolContract === null) return true;
           return (
             configData.poolsInfo[
-              getAddress(
-                option.poolContract
-              ) as keyof typeof configData.poolsInfo
+            getAddress(
+              option.poolContract
+            ) as keyof typeof configData.poolsInfo
             ] !== undefined
           );
         }),

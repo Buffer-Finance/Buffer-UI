@@ -13,7 +13,7 @@ export const useOneDayVolume = () => {
   const graphqlURL = config.graph.ABOVE_BELOW;
   const { data } = useSWR('above-below-one-day-volume', {
     fetcher: async () => {
-      const response = await axios.post('https://ponder.buffer.finance/', {
+      const response = await axios.post(indexer_url, {
         query: `{ 
               abVolumePerContracts(   
                 orderBy: "timestamp"

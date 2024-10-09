@@ -5,7 +5,7 @@ import { Chain } from 'viem';
 import { tokensPerInterval } from '../types';
 
 export const useTokensPerInterval = (activeChain: Chain) => {
-  const graphUrl = 'https://ponder.buffer.finance/';
+  const graphUrl = indexer_url;
   return useSWR<tokensPerInterval>(`${activeChain}-tokens-per-interval`, {
     fetcher: async () => {
       const query = `{

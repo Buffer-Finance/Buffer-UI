@@ -23,7 +23,7 @@ export const useAboveBelowMarketsSetter = () => {
     optionContracts: responseAB[];
     allContracts: responseAB[];
   }> {
-    const response = await axios.post('https://ponder.buffer.finance/', {
+    const response = await axios.post(indexer_url, {
       query: `{ 
         optionContracts(limit:1000,where:{routerContract:"${configData.above_below_router}"}) {
          items{
@@ -77,14 +77,14 @@ export const useAboveBelowMarketsSetter = () => {
         .map((option) => {
           const poolInfo =
             configData.poolsInfo[
-              getAddress(
-                option.poolContract
-              ) as keyof typeof configData.poolsInfo
+            getAddress(
+              option.poolContract
+            ) as keyof typeof configData.poolsInfo
             ];
           if (!poolInfo) return null;
           const chartData =
             marketsForChart[
-              (option.token0 + option.token1) as keyof typeof marketsForChart
+            (option.token0 + option.token1) as keyof typeof marketsForChart
             ];
           if (!chartData) return null;
           return {

@@ -50,7 +50,8 @@ const config = defineConfig(({ command, mode }) => {
 
     define: {
       __APP_ENV__: env.APP_ENV,
-      isDevnet: env?.VITE_ENV == 'devnet'
+      isDevnet: env?.VITE_ENV == 'devnet',
+      indexer_url: JSON.stringify(env.APP_ENV1)
     },
   };
 });

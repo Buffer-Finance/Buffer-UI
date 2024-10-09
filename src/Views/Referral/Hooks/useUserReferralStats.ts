@@ -31,7 +31,7 @@ export const useUserReferralStats = () => {
   );
   const { activeChain } = useActiveChain();
   const config = getConfig(activeChain.id);
-  const graphUrl = 'https://ponder.buffer.finance/';
+  const graphUrl = indexer_url;
   const queryFields = useMemo(() => {
     if (tokens.length > 1)
       return tokens.map((poolName) => getTokenXQueryFields(poolName)).join(' ');

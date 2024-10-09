@@ -31,7 +31,7 @@ export const useCompetitionRewardsClaimed = () => {
             `;
       try {
         const { data, status } = await axios.post(
-          'https://ponder.buffer.finance/',
+          indexer_url,
           {
             query,
           }
