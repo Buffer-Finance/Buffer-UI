@@ -32,12 +32,12 @@ const useHistoryTrades = () => {
       fetcher: async () => {
         if (!address || !activeChain.id || !markets)
           return { page_data: [], total_pages: 1 };
-        if (
-          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
-            activeChain.id as 42161
-          )
-        )
-          return { page_data: [], total_pages: 1 };
+        // if (
+        //   ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+        //     activeChain.id as 42161
+        //   )
+        // )
+          // return { page_data: [], total_pages: 1 };
         const res = await axios.get(`${baseUrl}trades/user/history/`, {
           params: {
             user_address: getAddress(address),

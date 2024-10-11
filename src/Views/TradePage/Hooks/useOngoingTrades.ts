@@ -38,12 +38,12 @@ const useOngoingTrades = () => {
     {
       fetcher: async () => {
         if (!userAddress) return [[], []] as TradeType[][];
-        if (
-          ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
-            activeChain.id as 42161
-          )
-        )
-          return [[], []];
+        // if (
+        //   ![arbitrum.id, arbitrumGoerli.id, arbitrumSepolia.id].includes(
+        //     activeChain.id as 42161
+        //   )
+        // )
+        //   return [[], []];
         let currentUserSignature = null;
         if (userAddress === address)
           currentUserSignature = await getSingatureCached(oneCTWallet);
