@@ -131,7 +131,8 @@ export const ActionButton: React.FC<{
   balance,
   // lockPeriod,
 }) => {
-  if (gt(amount || '0', divide(allowance, decimals))) {
+
+  if (gt(amount || '0', divide(allowance ||'0', decimals))) {
     return <ApproveButton activePool={activePool} activeChain={activeChain} />;
   }
   return (
