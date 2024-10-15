@@ -36,9 +36,10 @@ export const WithdrawTab: React.FC<{
   const unlockedBalance =
     readcallData[activePool + '-getUnlockedLiquidity']?.[0] ?? '0';
   const { data, error } = useBlpRate(activeChain, activePool);
-
+const blpPrice = data
+const blpBalance = minsa(fsBLPBalance, unlockedBalance);
   const balance = multiply(
-    minsa(fsBLPBalance, unlockedBalance),
+    blpBalance,
     divide(data?.price ?? '100000000', 8) ?? '0'
   );
   // console.log(
@@ -55,15 +56,19 @@ export const WithdrawTab: React.FC<{
       <InputField
         activePool={activePool}
         setValue={setAmount}
-        balance={balance ?? '0'}
-        unit={'USDC'}
+        balance={blpBalance ?? '0'}
+        unit={'uBLP'}
         decimals={decimals}
-        max={balance ?? '0'}
+        max={blpBalance ?? '0'}
         value={amount}
       />
       <div className="flex justify-between items-start mt-2">
         <span className="text-f12 font-medium text-[#C4C7C7]">
           You will receive:
+          {amount &&
+            blpPrice &&
+            divide(multiply(blpPrice.price, amount || '0'), 8) && toFixed(divide(multiply(blpPrice.price, amount || '0'), 8),2)} USDC
+     
         </span>
         <WithdrawButton
           activeChain={activeChain}
