@@ -5,7 +5,7 @@ export const useUserAccount = () => {
   const { address: account } = useAccount();
   const query = useQuery();
   return {
-    address: "0x000000e28fAA823d5B53ff6C2922c28335840375",
+    address: query.get('user_address') || account,
     viewOnlyMode: query?.get('user_address') ? true : false,
   };
 };
